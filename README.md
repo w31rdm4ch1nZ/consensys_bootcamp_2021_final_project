@@ -32,7 +32,7 @@ I want this dapp to empower them by enabling the **Ethereum DeFi ecosystem** to 
 
 **2. and an audience accessing through an NFT standard contract to a live video stream on LivePeer.**
 
-**[WHAT FOLLOWS is an elaboration of the ideas presented earlier - non need to read it for scoping the final project]**
+**[WHAT FOLLOWS is an elaboration of the ideas presented earlier - NO need to read it for scoping the final project]**
 
 **In short**: *ultimately, the idea is to develop a dApp that makes seamless the streaming of audiovisual content from an Ethereum account (and a wallet like Metamask), with very close to 0$ cost (using different strategies enabled by DeFi), and allow funding (producers) to directly leverage the Ethereum DeFi stack to lower costs and stick to the local area/ small scale economies I mentioned.*
 
