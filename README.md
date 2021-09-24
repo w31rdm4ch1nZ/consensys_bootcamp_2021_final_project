@@ -5,10 +5,10 @@
 
 ConsenSys Dev Bootcamp 2021 - Final Project repository
 
-**Problem**:
+##**Problem**:
 
 - Migration of users from centralized streaming platforms to decentralized platforms for web3 potential realization. 
-- Allowing local audivisual content creation economies to coordinate, capture value and retain a network effect / an audience - and ultimately more ways for the audience to engage with the form of ephemeral art forms though their digitization and NFTs-ike access, etc.
+- Allowing local audivisual content creation economies to coordinate, capture value and retain a network effect / an audience - and ultimately more ways for the audience to engage with the form of ephemeral art forms though their digitization and NFTs-like access, etc.
 
 **Context and motivation**:
 
