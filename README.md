@@ -5,41 +5,46 @@
 
 ConsenSys Dev Bootcamp 2021 - Final Project repository
 
-##**Problem**:
+**Problem**:
 
 - Migration of users from centralized streaming platforms to decentralized platforms for web3 potential realization. 
-- Allowing local audivisual content creation economies to coordinate, capture value and retain a network effect / an audience - and ultimately more ways for the audience to engage with the form of ephemeral art forms though their digitization and NFTs-like access, etc.
+- Allowing local/proximity audivisual (semi-pro movies, niche music, artists collective performance, etc.)  content creation economies to coordinate, capture value and retain a network effect / an audience - and ultimately more ways for the audience to engage with the form of ephemeral art forms though their digitization and NFTs-like access, etc.
 
 **Context and motivation**:
 
-I will stick to centralized streaming model that stays pertinent so far to express some of my choices (the pay-per-view getting really old and dificult to maintain with the new digital users, except for some hybrid models that manage to remain efficient, but still out of my scope for now). 
+I will stick to centralized streaming model that stays pertinent so far to express some of my choices (no pay-per-view). 
 
 - 1st, the Netflix and alike streaming platforms, mostly formed around already institutionnalized investments/productions and products/contents  catalogue (through markets or states institutions, depending on the location, the platform, and its targeted audience). 
-- 2nd, the “free beer” streaming service of Youtube (and alike..?), that usually involves for the local economies I am targeting the use of several other tools (e.g. crowdfunding).
+- 2nd, the “free beer” streaming service of Youtube (and alike..?), that usually involves for the proximity economies I am targeting the use of several other tools (e.g. crowdfunding).
 
-I aim at supporting the 2nd set of participants, temporary and local economies centered around what can take the form of a digital audiovisual content.
+*I aim at supporting the 2nd set of participants*, temporary/ephemeral and local/procimity economies centered around what can take the form of a digital audiovisual content.
  
-The dapp is targeting the local, and what I call “temporary autonomous organisations” directly referencing the Temporary Autonomous Zone (TAZ that I read early on and loved - https://en.wikipedia.org/wiki/Temporary_Autonomous_Zone ). 
+The dapp is targeting the local, and what I call “temporary autonomous organisations”, directly referencing the Temporary Autonomous Zone (TAZ - https://en.wikipedia.org/wiki/Temporary_Autonomous_Zone ). 
 The context of the dapp works around projects which, for a short time and/or a small scale economy (low capital concentration), unite around an audiovisual product/content/digitized event.
 
-I want to target those local economies where small “underground” artistic movements for example, **mostly auto-produced**, are struggling to work passionnately and be rewarded for their contributions and their hard work. 
+I want to target those local economies where small “underground” artistic movements for example, **mostly self-produced**, are struggling to work passionnately and be rewarded for their contributions and their hard work. 
 
 I want this dapp to empower them by enabling the **Ethereum DeFi ecosystem** to (at least) average their cost for streaming (storage, access content / streaming) close to a $0 cost, among other aspects already mentionned.  
 
+**In the context of this course (you can skip the content that follows this statement), I want my smart contract to implement the logic of:
+**1. a producer/investor interacting through the website frontend to pay the fees of the streaming on Livepeer (possibly integrating with a DeFi lnding/borrowing + tokenized on future yield set of protocols, a la Alchemix), 
+**2. and an audience accessing through an NFT standard contract to a live video stream on LivePeer.
 
-**In short**: the idea is to develop a dApp that makes seamless the streaming of audiovisual content from an Ethereum account (and a wallet like Metamask), with almost or 0$ cost, and allow funding (producers) to directly leverage the Ethereum DeFi stack to lower costs and stick to the local area/ small scale economies I mentioned.
+***[WHAT FOLLOWS is an elaboration of the ideas presented earlier - non need to read it for scoping the final project]
 
+**In short**: *ultimately, the idea is to develop a dApp that makes seamless the streaming of audiovisual content from an Ethereum account (and a wallet like Metamask), with very close to 0$ cost (using different strategies enabled by DeFi), and allow funding (producers) to directly leverage the Ethereum DeFi stack to lower costs and stick to the local area/ small scale economies I mentioned.*
 
 Ultimately, this would allow temporary autonomous organization to capture value and retain audiences and momentum through the digital decentralized protocol (my dapp...), like for an ephemeral performance made accessible through an NFT-like access right to its recording, and a pay structure based on such a setting (could also be a different setting - it is not the core of the logic of the dapp, just aiming at giviing an idea of the possibilities).
 
-In my case, the focus is on creating a logic on top of a DeFi stack than makes look like the user can stream and access streaming for free. 
-
-For that, I distinguish a scenario with at least *2 diffenrent types of users*, and *the dApp which acts as a decentralized platform to help coordination of the different stakeholders of a local economy aiming at producing and distributing short audiovisual contents* (short movies, short doumentaries, music movie clips): - a producer, 
+For that, I distinguish a scenario with at least *2 diffenrent types of users*, and *the dApp which acts as a decentralized platform to help coordination of the different stakeholders of a proximity economy aiming at producing and distributing short audiovisual contents* (short movies, short doumentaries, music movie clips): 
+- a producer, 
 - a consumer of the audiovisual content, 
 - and a protocol facilitating the use of the streaming service of LivePeer network for both users (the actual dapp / final project).  
 
 *The logic* allows a producer to connect to the Ethereum mainnet/testnet, and parameterize ones own distribution of a content (uploaded through the same frontend), its interaction with other participants, and never having to care about the stack DeFi/Ethereum/LivePeer to eventually reach a cost of almost 0$. 
 As most users are now so used to the "free" content and access to this content via platforms like Youtube, it seems a good opportunity to leverage the incredibly versatile and powerful DeFi existing ecosystem. 
+
+ => Creating a logic on top of a DeFi stack than makes look like the user can stream and access streaming for free, as the producers/investors, the creators and the audience/fans interact in novel ways through this decentralized stack. 
 
 
 **For that, my dapp would**:
