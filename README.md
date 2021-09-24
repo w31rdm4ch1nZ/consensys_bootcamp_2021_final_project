@@ -26,11 +26,11 @@ I want to target those local economies where small “underground” artistic mo
 
 I want this dapp to empower them by enabling the **Ethereum DeFi ecosystem** to (at least) average their cost for streaming (storage, access content / streaming) close to a $0 cost, among other aspects already mentionned.  
 
-**In the context of this course (you can skip the content that follows this statement), I want my smart contract to implement the logic of:
-**1. a producer/investor interacting through the website frontend to pay the fees of the streaming on Livepeer (possibly integrating with a DeFi lnding/borrowing + tokenized on future yield set of protocols, a la Alchemix), 
-**2. and an audience accessing through an NFT standard contract to a live video stream on LivePeer.
+**In the context of this course (you can skip the content that follows this statement), I want my smart contract to implement the logic of:**
+**1. a producer/investor interacting through the website frontend to pay the fees of the streaming on Livepeer (possibly integrating with a DeFi lnding/borrowing + tokenized on future yield set of protocols, a la Alchemix),**
+**2. and an audience accessing through an NFT standard contract to a live video stream on LivePeer.**
 
-***[WHAT FOLLOWS is an elaboration of the ideas presented earlier - non need to read it for scoping the final project]
+***[WHAT FOLLOWS is an elaboration of the ideas presented earlier - non need to read it for scoping the final project]**
 
 **In short**: *ultimately, the idea is to develop a dApp that makes seamless the streaming of audiovisual content from an Ethereum account (and a wallet like Metamask), with very close to 0$ cost (using different strategies enabled by DeFi), and allow funding (producers) to directly leverage the Ethereum DeFi stack to lower costs and stick to the local area/ small scale economies I mentioned.*
 
