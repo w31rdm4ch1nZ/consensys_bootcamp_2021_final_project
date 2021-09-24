@@ -17,17 +17,19 @@ I will stick to centralized streaming model that stays pertinent so far to expre
 - 1st, the Netflix and alike streaming platforms, mostly formed around already institutionnalized investments/productions and products/contents  catalogue (through markets or states institutions, depending on the location, the platform, and its targeted audience). 
 - 2nd, the “free beer” streaming service of Youtube (and alike..?), that usually involves for the proximity economies I am targeting the use of several other tools (e.g. crowdfunding).
 
-*I aim at supporting the 2nd set of participants*, temporary/ephemeral and local/procimity economies centered around what can take the form of a digital audiovisual content.
+*I aim at supporting the 2nd set of participants*, temporary/ephemeral and local/proximity economies centered around what can take the form of a digital audiovisual content.
  
 The dapp is targeting the local, and what I call “temporary autonomous organisations”, directly referencing the Temporary Autonomous Zone (TAZ - https://en.wikipedia.org/wiki/Temporary_Autonomous_Zone ). 
 The context of the dapp works around projects which, for a short time and/or a small scale economy (low capital concentration), unite around an audiovisual product/content/digitized event.
 
-I want to target those local economies where small “underground” artistic movements for example, **mostly self-produced**, are struggling to work passionnately and be rewarded for their contributions and their hard work. 
+I want to target those proximity economies where small “underground” artistic movements for example, **mostly self-produced**, are struggling to work passionnately and be rewarded for their contributions and their hard work. 
 
 I want this dapp to empower them by enabling the **Ethereum DeFi ecosystem** to (at least) average their cost for streaming (storage, access content / streaming) close to a $0 cost, among other aspects already mentionned.  
 
 **In the context of this course (you can skip the content that follows this statement), I want my smart contract to implement the logic of:**
+
 **1. a producer/investor interacting through the website frontend to pay the fees of the streaming on Livepeer (possibly integrating with a DeFi lnding/borrowing + tokenized on future yield set of protocols, a la Alchemix),**
+
 **2. and an audience accessing through an NFT standard contract to a live video stream on LivePeer.**
 
 **[WHAT FOLLOWS is an elaboration of the ideas presented earlier - non need to read it for scoping the final project]**
