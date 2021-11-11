@@ -1,0 +1,108 @@
+//Define the main functions leading to the possibility:
+//  1. for Content Providers (in ur use case, video streamers (using the LivePeer network))
+//  to use flexibly the Ethereum DeFi protocols to build new business models for their content creation and distribution, in their advantage
+//
+//  2. for any Ethereum EOA to access content in an easy yet extremely versatile way.
+
+
+// Important personal assumption for everything crypto: where there is no reason to have everyone to agree on the same state / reach consensus,
+//  prefer the option of the multiplicity (borrow/lending protocols, stablecoins vs one stablecoin for all, multi-chain vs. one L1, multi-verse vs one meta-verse - so decentraland is cool, but nothing should stop the user to use
+//  another similar protocol using the universe as a map, or *any imaginary geography*, etc.)
+
+
+// Current (10/29) use case I focus on:
+//  CPs on Livepeer and any user wanting to access a live stream in a specific location in the world + the request/answer mechanism
+//  (incentivizing both parties to act for the overall good of a community of netizens-journalists - a crowdjournalism platform where the center is the 
+//  content/information created and curated, not the consumer/media oligopoly model)
+
+
+//From a core LivePeer core developper: 
+//  https://showcase.ethglobal.com/hackmoney2021/ecco 
+//  https://cryptonews.com/news/nft-as-collateral-coming-to-aave-ceo-10575.htm
+
+
+contract MyCoreLogic {
+
+    //Study the ERC1155 contract to see how to use it with an escrow contract and if you might (advantageously) make it work for both ERC20 and ERC1155:
+    /*
+        ERC1155 is more than just an NFT token standard. It sets the stage for multi-token management and transactions. With ERC1155, single deployed 
+        contracts can include varied combinations of non-fungible, fungible, and semi-fungible tokens. 
+
+        With ERC1155, it is now possible to transfer different types of tokens in a single instance, saving on transaction costs. 
+        Moreover, it is also possible to create trades in the form of atomic swaps and escrows of multiple tokens on top 
+        of the ERC1155 standard. The system no longer needs to approve token contracts individually as ERC1155 has eliminated
+         this redundant step.
+
+        ERC1155 is a new way to create semi-fungible tokens. However, what are semi-fungible tokens? These are new types of 
+        tokens that merge different properties of the token standards that came before them. Think of it as having the best 
+        of both worlds. Let’s take this useful analogy: you’re able to create a store coupon – thus a fungible token – which 
+        holds the value until you redeem it. After redeeming the coupon, it has zero dollar value and you can not trade it 
+        as a regular fungible token. Therefore, the redeemed coupon, with altered properties, becomes unique with information 
+        about the item redeemed, the customer, the price, and so on. Hence, it becomes non-fungible. However, a semi-fungible 
+        token standard such as ERC1155 is capable of representing both attributes.
+
+        Enjin writes that “the contract state contains configuration data per token ID and all the behavior governing the collection.”
+
+        Therefore, this new token standard lets you create utility tokens such as BNB, for example, and NFTs such as CryptoPunks 
+        or CryptoKitties. Its optimizations also make transactions more efficient and safer. Unlike in ERC-721, ERC1155 bundles 
+        transactions together, thus reducing gas fees.
+
+        With ERC1155 contracts, it is now possible to transfer multiple types of tokens at the same time. You can build 
+        multiple functionalities such as atomic swaps and escrows (useful in trading) of various tokens on top of the ERC1155 standard.
+
+
+
+    */
+
+    //address of the escrow contract for funds - multiple ERC20 tokens
+    address public escrowContractAddress;
+
+    //address of the escrow contract for NFTs token contract:
+    address public waitVerse;
+
+    address public owner;
+     
+
+    //modifiers
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "access denied");
+        _;
+    }
+
+
+    //Events
+    event sentSuccessfully(bool success, string userUXMessage);
+
+    //constructor
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    //main functions layout, with inputs/arguments and outputs:
+
+    // send funds (ERC20) to an escrow contract: 
+    function pay(address _address, uint _amount) external onlyOwner returns(bool success){
+
+    }
+
+    // send NFTs (ERC721) to an escrow contract:
+    function transferNFTs(address _address) external onlyOwner returns(bool NFTtransfered) {
+
+    };
+
+    //mint NFT + ERC => exteranl call to  mint/instantiate an ERC1155 contract (maybe user)
+    function safeMint(uint NFTid, uint _amountERC20) external onlyOwner returns(uint tokenIdERC115) {
+        
+        return id;
+    }; 
+
+    //swap ERC20 tokens for NFT+ERC20 tokens and vice-versa + swap NFTs with a price to allow the swap being equal to the one denominated in ERC20 in ERC1155..? 
+
+
+    //Users' content request: conditional token for which users can vest tokens for (ERC20)
+
+    // 
+
+}
