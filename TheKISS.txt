@@ -1,0 +1,21 @@
+1st iteration, focusing on the Request for Content part.
+
+I will likely take a heavy inspiration from the gnosis predictive market set of contracts.
+
+https://docs.gnosis.io/conditionaltokens/tutorials/
+
+https://gist.github.com/cag/65dc3ddfa03f067dd41ca7121ee3120f
+
+
+https://docs.gnosis.io/conditionaltokens/docs/ctftutorial01/
+
+
+https://docs.gnosis.io/conditionaltokens/docs/pmtutorial1/
+
+
+Training:
+
+https://medium.com/@austin_48503/%EF%B8%8Fethereum-dev-speed-run-bd72bcba6a4c
+
+https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-1-decentralized-staking#-scaffold-eth---buidlguidl
+https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-1-decentralized-staking#-scaffold-eth---buidlguidl

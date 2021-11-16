@@ -32,7 +32,7 @@ The result is the first draft of the design of a general web3 Content Delivery d
 ## The 3 users/participants of/to the protocol
 
 
-This protocol involves *3 main users* (user-investors, CPs, any user-consumers once content delivered), interacting through smart contracts via 2 UIs.
+This protocol involves *3 main users* (user-investors, Content Providers, any user-consumers once content delivered), interacting through smart contracts via 2 UIs.
 Those users I call *"user-investor" and "Content Provider" (abreviated CP) / creators*. I might use both CP and creator in different contexts, but
 without impliying any different flow or business logic.
 
