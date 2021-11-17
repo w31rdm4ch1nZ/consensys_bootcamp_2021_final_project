@@ -36,7 +36,7 @@ This protocol involves *3 main users* (user-investors, Content Providers, any us
 Those users I call *"user-investor" and "Content Provider" (abreviated CP) / creators*. I might use both CP and creator in different contexts, but
 without impliying any different flow or business logic.
 
-[SEE APPENDICE for a 4th participant to be added to the design in future iterations]
+[SEE ANNEX 1 for a 4th participant to be added to the design in future iterations]
 
 ## High-level description of the protocol:
 
@@ -123,7 +123,7 @@ I might have to drop a few mechanisms, or simplify them a lot to be just a very 
 I want the idea/use case to be manifest, despite the simplistic version delivered for the Final Project.
 
 
-## APENDICE 1 – The 4th participant:
+## ANNEX 1 – The 4th participant:
 
 I have the idea to bring a 4th participants – but I won’t design and implement her logic in this iteration.
 She would be there to: bring content curation, based on a quality process – think of everything happening in the NFT space and the one time every person observes that he has managed distinguished and maybe even acquired a great piece of art that stands out and is by all means superior to this trendy piece by Fuckrender/X or any other artist that sells art for nice amounts, with simple concept masquerading deep spiritual notions and experience, this expressionism being represented by 3D rendering all looking very similar and having for digital legitimacy only this 3d suite of tools they use. The result is cheap. The outcome is a lotta money. And this great piece of art that you found might find its well deserved recognition down the line, with time making its work on kitsch and easy digital impressions trends. But, we aim at accelerating this cycle for most, or at least give a more fair chance to the new comers, the ones that require more to be digestible by the current crypto-NFT-crowd. “Current” is being factored in this new role and the set of interactions defined from this as a moving target, with trend cycles, narratives, etc. - it doesn’t matter, it is about breaking some of the negative feedback loops existing in art since there is a market for it. This will be tackled based on the challenges that can be defined from this first acknowledgment.
@@ -132,3 +132,9 @@ Then, we’ll take more time on both analysis of current market mechanisms, and 
 
 Starting with this 4th participant, we’ll work to redefine this process so those outputs give a chance of a more interesting (allowing modulating and factoring “intensity”, like in the quadratic voting and Vickery auctions mechanism – cf. Radical markets) and more fair pricing mechanism – especially to new-comers, minority trends, etc. that with some “expertise” could be understood as the real driver of the next wave without giving all opportunity to the current super-stars to just transition and make their the new trend, and keeping extracting the value out of those who pioneered the technics and creative process now becoming dominant trend through the same dominant network.
 It relates to a larger pb, that designing market mechanisms must confront. The new-comers are badly out of luck once the market mechanisms don’t handle the first mover advantage – without acknowledging the fairy tale of (in)-genious strategist whose benefited from a great alignment of where-when-who (the “who” being a human/social network capacity, not individuals, but ready to give in the myth of the one-man rising from the void to give life to novelty). And what is fair is only the result of this narrative that eludes the power structure at play here (monopolistic inherited behaviors embedded in the current market institution).
+
+
+## ANNEX 2:
+
+All of it might be optimized (a beta version, fully functional) and re-architectured using the "counterfactual instanciation" pattern (where a lot seems to
+be possible of-chain without breaking the security model of channels - cf. Counterfactual: Generalized State Channel article).
