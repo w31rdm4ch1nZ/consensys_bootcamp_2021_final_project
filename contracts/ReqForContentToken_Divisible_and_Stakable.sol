@@ -155,3 +155,24 @@ according to the outcome market/predictive market. Doing so, think about your ne
     merge equal amounts positions into their underlying collateral or positions."
 
 */
+
+contract ProductProvider is ERC1155 {
+//Each type of content is linked to one or several protocols (Filecoin, Audius, LivePeer, etc.), each linked 
+//to a certain collateral that will allow the payment of the fees to become the medium of the content 
+// Make sure choosing it to be a data structure enum is still dynamic - otherwise choose a different way to build this so it can be dynamic, maybe by using an index that can take in 
+// input some data from th UI frontend - through web3.js or so, in a way that can't be tampered with (if it is even possible without using a central server, and is using the security
+// model of ethereum smart contract).
+enum ContentType {
+    NFT,
+    LiveStream,
+    Video,
+    Audio,
+    Article,
+    Software
+}
+
+
+
+
+
+}

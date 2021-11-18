@@ -26,3 +26,66 @@
 
 
 */
+
+pragma solidity ^0.5.9;
+//the abicoder-v2, to allow for arbitrary nested arrays and structs to be encoded and decoded in calldata. => to research.
+pragma abicoder v2;
+
+
+//import required by Pendle:
+import './IPendleRouter.sol';
+import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+
+
+contract ManageFunds {
+
+    //variables
+
+
+    //events
+
+
+    //constructor
+
+
+    //fallback and ..? functions
+
+
+    //user-investors functions related to funds management
+    function receiveInvestorsFunds(address _sender, uint256 _amount) external payable returns() {
+        //metadata recording to facilitate the management of the funds of the user-investors,
+        // and the tracking of the investors position through an NFT minted
+        timeOfDeposit = time.?;
+        ...
+
+
+    };
+
+    function receiveCPsFunds(address _sender, uint256 _amount) external payable returns() {
+        //specific metadata reagrding the deposit so the fund management automation can be done properly, 
+        // and the tracking of the CP position through an NFT minted
+
+
+
+    };
+
+    function poolingFunds() internal returns() {};
+
+    //Pendle functions contract ABI calls - see docs (if the AMM is not worth it, maybe better to do it by yourself directly working with Compound or 
+    // Aave tokens and tokenized future yields)
+    /*
+        SUPER IMPORTANT TO CONTINUE THAT ROAD, their contracts address on the Kovan testnet: 
+        https://docs.pendle.finance/docs/addresses/kovan
+
+        SDK reference to build on Pendle:
+        https://docs.pendle.finance/docs/reference/intro
+
+        ANOTHER IMPORTANT ASPECT for testing to work:
+        As Pendle is reliant on other other DeFi protocols like Aave and Compound for their yield tokens, it is important 
+        to have these protocols set up in your test environment during development. Hence, to avoid having to deploy 
+        these protocols from scratch, and to best simulate mainnet conditions, we recommend using Hardhat's mainnet forking feature."
+
+    */
+    function callPendle
+
+}
