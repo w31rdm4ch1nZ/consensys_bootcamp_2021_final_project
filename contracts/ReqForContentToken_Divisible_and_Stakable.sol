@@ -157,86 +157,152 @@ according to the outcome market/predictive market. Doing so, think about your ne
 */
 
 contract ProductProvider is ERC1155 {
-//Each type of content is linked to one or several protocols (Filecoin, Audius, LivePeer, etc.), each linked 
-//to a certain collateral that will allow the payment of the fees to become the medium of the content 
-// Make sure choosing it to be a data structure enum is still dynamic - otherwise choose a different way to build this so it can be dynamic, maybe by using an index that can take in 
-// input some data from th UI frontend - through web3.js or so, in a way that can't be tampered with (if it is even possible without using a central server, and is using the security
-// model of ethereum smart contract).
-
-
-//Request for Content tokenization definition - check the way Gnosis tokenizes its "rich-logic/data tokens":
-enum ContentType {
-    NFT,
-    LiveStream,
-    Video,
-    Audio,
-    Article,
-    Software
-}
-
-enum Platform {
-    OpenSea,
-    LivePeer,
-    Audius,
-    Filecoin,
-    Arweave,
-    Siacoin,
-    ...,
-    undefined
-}
-
-enum dataRetrievedAPIToBeUsed {
-    Google,
-    GoogleMap,
-    TheGraph,
-    ...,
-    undefined
-}
-
-enum Collateral {
-    ETH,
-    FIL,
-    BTC,
-    LVP,
-    ...,
-    USDT,
-    UST,
-    DAI
-} 
-
-//then read (sequentially in memory) the struct so you can add (or not) those elements to the final RfC token: 
-struct Proofs {
-    //in case users want to define a specific 
-    string ProofOfSpace,
-    string ProofOfExistence,
-    //in case users want a content originating from a specific geo-location:
-    string ProofOfLocation,
-    string ProofOfAuthenticity,
-    string ProofOfUniqueness,
-    //in case users want some specific entity/organization/individual to be part of the content production:
-    string ProofOfParticipation
-}
-
-
-//in memory, at execution time in EVM instantiation of the RfC as a struct of array (?)
-
-//The RfC struct, leading to the set of components and properties to be eventually tokenized as representing the request for content
-struct RequestForContent(
-    ContentType[] contentTypes,
-    Platform[] platforms,
-    dataRetrivedAPIToBeUSed[] APIs,
-    Collateral[] RfCCollateral, 
-    ...,
-)
+    //Each type of content is linked to one or several protocols (Filecoin, Audius, LivePeer, etc.), each linked 
+    //to a certain collateral that will allow the payment of the fees to become the medium of the content 
+    // Make sure choosing it to be a data structure enum is still dynamic - otherwise choose a different way to build this so it can be dynamic, maybe by using an index that can take in 
+    // input some data from th UI frontend - through web3.js or so, in a way that can't be tampered with (if it is even possible without using a central server, and is using the security
+    // model of ethereum smart contract).
 
 
 
-//minting the RfC
+    //Phases/Cycles/Steps of the Content delivery:
+    enum DeliveryStatus {
+        investorsVote,
+        cancelled,  //can happen at several stage on a mechanism of coordination between investors (that you might not implement
+                    // for this iteration)
+        mintedRfC,
+        CPsProposition,
+        contentInProduction, // pendingDelivery (?)
+        contentDelivered,
+        qualityEvaluation,  // not sure I will implement any mechanism fo that at this point   
+        contentAccepted,    //triggers the CP(s) payment
+        contentRefusedAsIs, // starts a new proposition for CP(s) (either calling the function "contentEnrichment()", or resets
+                            // to CPsProposition step (it avoids cost of new minting and the cost of the compounded Yield assotiated 
+                            // operations))
+        contentAccessibleByInvestors,
+        contentAccessForEveryone
+    }
 
-function mintRfc(RequestForContent RfC, bool isFinalized, int256 fundsPooledInvestorsAmount, uint256 fundsPooledCPsAmount) external returns() {};
-    //NFT minted, incorporating the possibilities to be then split (as for Gnosis Conditional Tokens)
-}
 
-function collaterlizedRfCAtMinting() internal returns() {
-    
+    //Request for Content tokenization definition - check the way Gnosis tokenizes its "rich-logic/data tokens":
+
+
+
+    enum ContentType {
+        NFT,
+        LiveStream,
+        Video,
+        Audio,
+        Article,
+        Software
+    }
+
+    enum PlatformIntegrationAtDelivery {
+        OpenSea,
+        LivePeer,
+        Audius,
+        Filecoin,
+        Arweave,
+        Siacoin,
+        ...,
+        undefined
+    }
+    enum PlatformUsedToMintDeliverContent {
+        OpenSea,
+        LivePeer,
+        Audius,
+        Filecoin,
+        Arweave,
+        Siacoin,
+        ...,
+        undefined
+    }
+
+    enum dataRetrievedAPIToBeUsed {
+        Google,
+        GoogleMap,
+        TheGraph,
+        ...,
+        undefined
+    }
+
+    enum Collateral {
+        ETH,
+        FIL,
+        BTC,
+        LVP,
+        ...,
+        USDT,
+        UST,
+        DAI
+    } 
+
+    //then read (sequentially in memory) the struct so you can add (or not) those elements to the final RfC token: 
+    struct Proofs {
+        //in case users want to define a specific 
+        string ProofOfSpace,
+        string ProofOfExistence,
+        //in case users want a content originating from a specific geo-location:
+        string ProofOfLocation,
+        string ProofOfAuthenticity,
+        string ProofOfUniqueness,
+        //in case users want some specific entity/organization/individual to be part of the content production:
+        string ProofOfParticipation
+    }
+
+
+    //in memory, at execution time in EVM instantiation of the RfC as a struct of array (?)
+
+    //The RfC struct, leading to the set of components and properties to be eventually tokenized as representing the request for content
+    struct RequestForContent(
+        ContentType[] contentTypes,
+        Platform[] platforms,
+        dataRetrivedAPIToBeUSed[] APIs,
+        Collateral[] RfCCollateral, 
+        ...,
+    )
+
+
+
+    //minting the RfC
+
+    //Define some mandatory fields for a RfC to be minted
+
+    //Mint of a RfC to enter the proposal to CPs cycle will require from investors to commit funds/send funds to the escrow 
+    // contract
+
+    //RfC struct has to pass some basic conditions: 
+    // length != null
+    // length > 0 
+    // components <= 256 (check if data type like struct can have more elements??)
+    // controls on the mandatory fields (to be defined in your contract - eg. at least one contentType, etc.) 
+
+    function mintRfc(RequestForContent RfC, bool isFinalized, int256 fundsPooledInvestorsAmount, uint256 fundsPooledCPsAmount) external returns() {};
+        //TO DO
+
+        //NFT minted, incorporating the possibilities to be then splitted (as for Gnosis Conditional Tokens)
+    }
+
+    //called in mint function (probably?)
+    function collaterlizedRfCAtMinting() internal returns() {
+        //TO DO
+    };
+
+    //function splitRfC (to be called by mint function?)
+    function splitRfC() internal returns() {
+        //TO DO
+        
+        //split pattern: mandatory fields (1st token) / offset -> property X = 2nd token / etc.
+        // 
+        // Minting those NFT-associated-to-"yes/no"-tokens where: 
+        // 1/ we want to know in the end if it is included in the delivery
+        // 2/ can be used (function can be called for this use case too) to coordinate/delegate several CPs on 1 RfC
+        // 3/ must correspond to a calculation on CPs slashing on rewards if not delivered (how do we come to an agreement on that?) )
+    }
+
+    function fuseRfCElements()          // might be called in 2 instances:
+                                        // 1/ contentEnrichment (means adding an investors voting phase between contentDelivered
+                                        //      and contentAccepted )
+                                    
+
 }
