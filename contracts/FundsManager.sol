@@ -109,11 +109,30 @@ contract FundsManager {
 
     };
 
+    // Write functions for the Delegation proof-of-satke mechanism,
+    //  to have several CPs coordinating on different aspect of the RfC
+
+    // Design of the CP(s) commit phase:
+    function CPCommitSignal(address _CP,uint256 _amount) internal returns() {
+        //TO DO
+
+        //lock amount for 3 days (the actual lasting of a full proposal RfC round + 1 week)
+        // + if RfC is not minted (or CP not accepted as CP by investors => no DAO implementation
+        // so far, so will stick to the simplest case and mechanism for now))
+    }
+
+    //functions associated with the split RfC Token function. 
+    // Can be:
+    // proposal ends up having several CPs answering -> RfC split proposition (then exact split has to be accepted by
+    // every CPs deciding to commit, with an order of importance (deciding of the dPOS: delegator -> delegatee) that goes
+    // from mandatory fields to properties a-z ->  
+
+
     function splitCPsFundsForDelegatees(RequestFoContent ) internal resturns() {};
 
     
 
-    //Pendle functions contract ABI calls - see docs (if the AMM is not worth it, maybe better to do it by yourself directly working with Compound or 
+    //<<<<<<Pendle functions contract ABI calls>>>>> - see docs (if the AMM is not worth it, maybe better to do it by yourself directly working with Compound or 
     // Aave tokens and tokenized future yields)
     /*
         SUPER IMPORTANT TO CONTINUE THAT ROAD, their contracts address on the Kovan testnet: 

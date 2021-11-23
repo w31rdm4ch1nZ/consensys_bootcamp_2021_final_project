@@ -323,12 +323,22 @@ contract ProductProvider is IERC1155, ReentrencyGuard {          // The contract
         //TO DO
     }
 
-    //coordination mechanism for Content Providers when several answer the RfC proposition
+    /*
+        Coordination mechanism for Content Providers when several answer the RfC proposition:
+          
+          - Based on the possibility for 2 CPs to trigger the execution of the function splitRfC() so one takes
+          ownership of a part of the RfC and of the completion of the aspect(s) of the content; 
+                ==> in the RfC is IERC1155 contract
+          - and on a delegate proof-of-stake mechanism (look and take for model something already existing - maybe
+          FEI protocol? and what the nice added to make it a compound staking? or more in the Tezos spirit (of delegation)
+          or something close and then try to implement you way - likely naive but who cares?)
+                ==> maybe a separate contract, or (more simple to deploy) in the ManageFunds.sol core contract
+        Make sure no 2 CP are working on the same tasks (at least unknowingly - if they 
+        to compete, they might as well do it)
 
-    // Make sure no 2 CP are working on the same tasks (at least unknowingly - if they 
-    // to compete, they might as well do it)
+        The ERC20 staking delegation machanism to the escrow contracts is the core aspect
+        of this mechanism
 
-    //The ERC20 staking delegation machanism to the escrow contracts is the core aspect
-    // of this mechanism
 
+    */
 }
