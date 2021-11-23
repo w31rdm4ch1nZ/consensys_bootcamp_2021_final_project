@@ -16,3 +16,17 @@
 >>>>>>>>>Either a variation of the Ownable.sol contract from OpenZeppelin, or you import this contract. Your call.
 
 */
+
+contract UserRoles {
+
+    // user type (take into account they might be both at the same time)
+
+    enum UserType {
+        Investor,
+        ContentProvider,
+        undefuned
+    }
+
+    mapping (addr => UserType)
+
+}
