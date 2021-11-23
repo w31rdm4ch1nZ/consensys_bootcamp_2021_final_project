@@ -300,9 +300,15 @@ contract ProductProvider is ERC1155 {
         // 3/ must correspond to a calculation on CPs slashing on rewards if not delivered (how do we come to an agreement on that?) )
     }
 
-    function fuseRfCElements()          // might be called in 2 instances:
-                                        // 1/ contentEnrichment (means adding an investors voting phase between contentDelivered
-                                        //      and contentAccepted )
+    function fuseRfCElements() internal returns() {};// might be called in 2 instances:
+                                                    // 2/ contentQuality not passed (investors vote - simple mechanism, same
+                                                    // as below) and investors still want to commit w/o the cost incurred by a
+                                                    // new RfC whole cycle (including gaining on the Yield compounded that  
+                                                    // would be lost if reset to the very beginning)
+                                                    // 1/ contentEnrichment (means adding an investors **voting phase** 
+                                                    //      between contentDelivered and contentAccepted 
+                                                    //      => think of an easy way to implement it )
+                                                    // 
                                     
 
 }
