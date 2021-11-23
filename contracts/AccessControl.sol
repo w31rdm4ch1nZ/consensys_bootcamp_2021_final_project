@@ -13,6 +13,6 @@
 
 /*
 
-Either a variation of the Ownable.sol contract from OpenZeppelin, or you import this contract. Your call.
+>>>>>>>>>Either a variation of the Ownable.sol contract from OpenZeppelin, or you import this contract. Your call.
 
 */

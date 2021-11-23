@@ -1,5 +1,8 @@
 /*
 
+SHOULD NOW BE USELESS AS THE ESCROW CONTRACT MANAGING FUNDS AND HANDLING THE USE OF PENDLE DOES NOT REQUIRE
+THOSE CUSTOM PRIMITVES (FOR NOW)
+
 - To mint yield tokens, in case I don't use Pendle and decide to implement it in a simple way for 1/ demonstrating my idea of its interest,
 2/ understanding through first principles the mechanisms at play.
 

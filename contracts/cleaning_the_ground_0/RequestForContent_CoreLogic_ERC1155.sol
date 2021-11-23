@@ -1,4 +1,5 @@
-// check https://exploringethereum.substack.com/p/gnosiss-conditional-tokens for an intro to Conditional Tokens as the primitive for predictive markets
+// check https://exploringethereum.substack.com/p/gnosiss-conditional-tokens 
+// for an intro to Conditional Tokens as the primitive for predictive markets
 
 /*
 

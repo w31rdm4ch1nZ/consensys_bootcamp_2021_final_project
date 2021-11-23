@@ -1,5 +1,8 @@
 /*
 
+>>>>[[[[[11/23: IS NOW A MERGE OF BOTH ReqForContentToken_Divisible_and_Stakable.sol 
+AND RequestForContent_CoreLogic_ERC1155.sol]]]]]<<<<<
+
 For now, a placeholder for the logic intervening when the Content Delivery event outcome is evaluated:
     - yes/true tokens;
     - OR no/false tokens;
@@ -156,7 +159,7 @@ according to the outcome market/predictive market. Doing so, think about your ne
 
 */
 
-contract ProductProvider is ERC1155 {
+contract ProductProvider is IERC1155, ReentrencyGuard {          // The contract can call standard functions from the ERC-1155 (as I understand it so far)
     //Each type of content is linked to one or several protocols (Filecoin, Audius, LivePeer, etc.), each linked 
     //to a certain collateral that will allow the payment of the fees to become the medium of the content 
     // Make sure choosing it to be a data structure enum is still dynamic - otherwise choose a different way to build this so it can be dynamic, maybe by using an index that can take in 
@@ -262,7 +265,10 @@ contract ProductProvider is ERC1155 {
         ...,
     )
 
-
+    //read function of te struct to extract offsets for properties, and metadata to be used, like length, etc.
+    function readRfCStruct(RequestForContent RfC) internal returns(int256 length, uint256[] proertiesOffsets, ..?) {
+        //TO DO
+    }
 
     //minting the RfC
 
@@ -300,7 +306,8 @@ contract ProductProvider is ERC1155 {
         // 3/ must correspond to a calculation on CPs slashing on rewards if not delivered (how do we come to an agreement on that?) )
     }
 
-    function fuseRfCElements() internal returns() {};// might be called in 2 instances:
+    function mergeEl() internal returns() {  // might be called in 2 instances:
+        //TO DO
                                                     // 2/ contentQuality not passed (investors vote - simple mechanism, same
                                                     // as below) and investors still want to commit w/o the cost incurred by a
                                                     // new RfC whole cycle (including gaining on the Yield compounded that  
@@ -309,6 +316,19 @@ contract ProductProvider is ERC1155 {
                                                     //      between contentDelivered and contentAccepted 
                                                     //      => think of an easy way to implement it )
                                                     // 
-                                    
+    }
+
+    //for readability and clarity (in function call for instance), separate the function below from the one adding new elements:
+    function addNewElToRfC() internal returns () {
+        //TO DO
+    }
+
+    //coordination mechanism for Content Providers when several answer the RfC proposition
+
+    // Make sure no 2 CP are working on the same tasks (at least unknowingly - if they 
+    // to compete, they might as well do it)
+
+    //The ERC20 staking delegation machanism to the escrow contracts is the core aspect
+    // of this mechanism
 
 }

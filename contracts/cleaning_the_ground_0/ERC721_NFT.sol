@@ -1,4 +1,5 @@
 /*
+Past notes of a past overall scaffholding
 
 Mint this NFT (1155) as either:
     - the content itself (case of work of art, PFP project, Proof of ownership on a certain asset, etc.);
