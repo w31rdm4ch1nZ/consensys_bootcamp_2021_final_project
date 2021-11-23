@@ -168,6 +168,14 @@ contract ProductProvider is IERC1155, ReentrencyGuard {          // The contract
 
 
 
+    /*
+            >>>>
+                ALL THE FOLLOWING POSSIBLE COMPONENTS ARE DISPLAYED TO USERS 
+                THROUGH A WEB LIST THAT THEY CAN SELECT - FOR THE ONES MAKING A RfC
+                PROPOSALS
+            <<<<< 
+    */
+
     //Phases/Cycles/Steps of the Content delivery:
     enum DeliveryStatus {
         investorsVote,
@@ -339,6 +347,18 @@ contract ProductProvider is IERC1155, ReentrencyGuard {          // The contract
         The ERC20 staking delegation machanism to the escrow contracts is the core aspect
         of this mechanism
 
+        Have to decide for CP choice:
+            - a first comes first serve simple selection?
+            - a round of commit + an investors' vote + a possible coordination through delegation
+            of the main CP contributor (biggest stake for now - KISS, please, KISS)?
+                ==> Stick to the "no fully fledged DAO implementation" on 1st iteration, 
+                so the choice holds to it.
+
 
     */
+
+    //For now, simplified to biggest stake commited in the proposition round (in the idea that
+    // it can become then a delegator as it has the capital to cover the start, etc.)
+    function
+
 }
