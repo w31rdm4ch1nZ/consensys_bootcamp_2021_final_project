@@ -162,6 +162,9 @@ contract ProductProvider is ERC1155 {
 // Make sure choosing it to be a data structure enum is still dynamic - otherwise choose a different way to build this so it can be dynamic, maybe by using an index that can take in 
 // input some data from th UI frontend - through web3.js or so, in a way that can't be tampered with (if it is even possible without using a central server, and is using the security
 // model of ethereum smart contract).
+
+
+//Request for Content tokenization definition - check the way Gnosis tokenizes its "rich-logic/data tokens":
 enum ContentType {
     NFT,
     LiveStream,
@@ -171,8 +174,69 @@ enum ContentType {
     Software
 }
 
+enum Platform {
+    OpenSea,
+    LivePeer,
+    Audius,
+    Filecoin,
+    Arweave,
+    Siacoin,
+    ...,
+    undefined
+}
+
+enum dataRetrievedAPIToBeUsed {
+    Google,
+    GoogleMap,
+    TheGraph,
+    ...,
+    undefined
+}
+
+enum Collateral {
+    ETH,
+    FIL,
+    BTC,
+    LVP,
+    ...,
+    USDT,
+    UST,
+    DAI
+} 
+
+//then read (sequentially in memory) the struct so you can add (or not) those elements to the final RfC token: 
+struct Proofs {
+    //in case users want to define a specific 
+    string ProofOfSpace,
+    string ProofOfExistence,
+    //in case users want a content originating from a specific geo-location:
+    string ProofOfLocation,
+    string ProofOfAuthenticity,
+    string ProofOfUniqueness,
+    //in case users want some specific entity/organization/individual to be part of the content production:
+    string ProofOfParticipation
+}
+
+
+//in memory, at execution time in EVM instantiation of the RfC as a struct of array (?)
+
+//The RfC struct, leading to the set of components and properties to be eventually tokenized as representing the request for content
+struct RequestForContent(
+    ContentType[] contentTypes,
+    Platform[] platforms,
+    dataRetrivedAPIToBeUSed[] APIs,
+    Collateral[] RfCCollateral, 
+    ...,
+)
 
 
 
+//minting the RfC
 
+function mintRfc(RequestForContent RfC, bool isFinalized, int256 fundsPooledInvestorsAmount, uint256 fundsPooledCPsAmount) external returns() {};
+    //NFT minted, incorporating the possibilities to be then split (as for Gnosis Conditional Tokens)
+}
+
+function collaterlizedRfCAtMinting() internal returns() {
+    
 }

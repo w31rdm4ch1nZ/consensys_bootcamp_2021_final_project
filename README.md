@@ -162,3 +162,11 @@ It relates to a larger pb, that designing market mechanisms must confront. The n
 
 All of it might be optimized (a beta version, fully functional) and re-architectured using the "counterfactual instanciation" pattern (where a lot seems to
 be possible of-chain without breaking the security model of channels - cf. Counterfactual: Generalized State Channel article).
+
+## ANNEX 3:
+The DAO:
+
+In a sentence: always seeking, including when a DAO intervenes, minimum intervention of the DAO. It translates in resilient, safe and valid logic embedded in the smart contracts.
+
+Principle of minimum DAO intervention => protocol designed with some goals that are here to stay.
+The "How?" can in some circumstances be put to a DAO-like vote, there can be part of the protocols revenue that goes to a DAO's treasury, allowing for expenses directly related to the protocol maintenance, devlopment and time/context-awareness, or apt to adapt to changing conditions to maintain its goals.

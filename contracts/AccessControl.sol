@@ -9,3 +9,10 @@
 //  - dapp administrator, mostly for upgrades if for anything else (planning on having at the very least a multi-sig change/upgrade scheme,
 //              and eventually automate enough so most can't be touched by anyone - actually achieving 0-trust).
 //      => check OpenZeppelin Upgradable pattern
+
+
+/*
+
+Either a variation of the Ownable.sol contract from OpenZeppelin, or you import this contract. Your call.
+
+*/
