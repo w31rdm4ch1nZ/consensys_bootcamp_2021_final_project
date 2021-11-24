@@ -159,7 +159,19 @@ according to the outcome market/predictive market. Doing so, think about your ne
 
 */
 
-contract ProductProvider is IERC1155, ReentrencyGuard {          // The contract can call standard functions from the ERC-1155 (as I understand it so far)
+
+pragma solidity ^0.5.1;
+
+import { IERC20 } from "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
+//import { ERC1155 } from "./ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155MetadataURI.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
+
+import "@openzeppelin/contracts/token/ERC1155/ERC1155Pausable.sol";
+import "@openzeppelin/contracts/token/ERC1155/ERC1155Burnable.sol";
+
+contract ProductProvider is ERC1155 {          // The contract can call standard functions from the ERC-1155 (as I understand it so far)
     //Each type of content is linked to one or several protocols (Filecoin, Audius, LivePeer, etc.), each linked 
     //to a certain collateral that will allow the payment of the fees to become the medium of the content 
     // Make sure choosing it to be a data structure enum is still dynamic - otherwise choose a different way to build this so it can be dynamic, maybe by using an index that can take in 
@@ -265,13 +277,15 @@ contract ProductProvider is IERC1155, ReentrencyGuard {          // The contract
     //in memory, at execution time in EVM instantiation of the RfC as a struct of array (?)
 
     //The RfC struct, leading to the set of components and properties to be eventually tokenized as representing the request for content
-    struct RequestForContent(
-        ContentType[] contentTypes,
-        Platform[] platforms,
-        dataRetrivedAPIToBeUSed[] APIs,
-        Collateral[] RfCCollateral, 
-        ...,
-    )
+    struct RequestForContent {
+        //Define 1st the "mandatory" fields (for the RfC to even be considered to be proposed )
+        ContentType[] contentTypes;
+        Platform[] platforms;
+        dataRetrivedAPIToBeUSed[] APIs;
+        Collateral[] RfCCollateral;
+        ...;
+        Properties[] RfCProperties
+    }
 
     //read function of te struct to extract offsets for properties, and metadata to be used, like length, etc.
     function readRfCStruct(RequestForContent RfC) internal returns(int256 length, uint256[] proertiesOffsets, ..?) {
