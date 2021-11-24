@@ -160,6 +160,16 @@ contract FundsManager {
     function splitCPsFundsForDelegatees(RequestFoContent ) internal resturns() {};
 
     
+    /*
+        >>>>>
+            LAST IMPORTANT PIECE OF YOUR 1ST ITERATION:
+            THE "PROTOCOL CONTROLLED VALUE" (PCV), OR THE VALUE ACCRUED
+            BY THE PROTOCOL OVER TIME THROUGH A RATIO TAKEN ON SOME TRANSACTIONS
+            (BE VERY CAREFUL AT HOW THAT MIGHT IMPACT THE INCENTIVE OF THE
+            ESSENTIAL PARTICIPANTS TO THE PROTOCOL - INVESTORS AND CONTENT PROVIDERS) 
+        <<<<<
+    */
+
 
     //<<<<<<Pendle functions contract ABI calls>>>>> - see docs (if the AMM is not worth it, maybe better to do it by yourself directly working with Compound or 
     // Aave tokens and tokenized future yields)

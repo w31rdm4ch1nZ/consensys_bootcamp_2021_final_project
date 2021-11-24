@@ -306,12 +306,27 @@ contract ProductProvider is IERC1155, ReentrencyGuard {          // The contract
     function splitRfC() internal returns() {
         //TO DO
         
-        //split pattern: mandatory fields (1st token) / offset -> property X = 2nd token / etc.
+        /*split pattern: mandatory fields (1st token) / offset -> property X = 2nd token / etc.
         // 
         // Minting those NFT-associated-to-"yes/no"-tokens where: 
         // 1/ we want to know in the end if it is included in the delivery
-        // 2/ can be used (function can be called for this use case too) to coordinate/delegate several CPs on 1 RfC
+        // 2/ can be used (function can be called for this use case too) to coordinate/delegate several CPs on 1 RfC - in the case
+        //      where several ContentType, PlatformIntegrationAtDelivery, ..., (any field having several members for the same element)
+        //      that might require by ) are expected (tokenized in the RfC).
         // 3/ must correspond to a calculation on CPs slashing on rewards if not delivered (how do we come to an agreement on that?) )
+        //      ==> let's agree that in the delivery content, the medium, the content format, accessibility, exactitude (ex: geolocation)
+        //      will be valued more than the richness in properties. It does not mean "a lot" more, so a ratio that 
+        //      >>>***captures some intuitive "successful in delivery AND having a quality that we might expect 
+        //      given the RfC **and its future cunsumption**"***<<< [[[THIS WOULD BECOME A WHOLE TOPIC IN ITSELF TO RESEARCH TO MAKE THIS PROTOCOL ACTUALLY
+                WORK IN THE WILD... a bit like the work Gnosis team made to come up with Conditional Tokens for predictive markets I'm guessing]]]
+                    => I think that is it: if I manage to define in a satisfactory way the intended future consumption of the content,
+                    I will have some better pre-agreement on the content "quality".
+
+                    BUT, that being said, I have to add a round of possible complaints by users for a delivery that does not fulfill the
+                    intended content in a significant way - although if I manage to define in a satisfactory way a Request for Content pattern,
+                    I will not need this (overhead and un/de-coordinated behavior - very difficult it seems to get afterwards except by 
+                    very costly outcomes like "redo or cancel"...).
+        */
     }
 
     function mergeEl() internal returns() {  // might be called in 2 instances:
@@ -330,35 +345,5 @@ contract ProductProvider is IERC1155, ReentrencyGuard {          // The contract
     function addNewElToRfC() internal returns () {
         //TO DO
     }
-
-    /*
-        Coordination mechanism for Content Providers when several answer the RfC proposition:
-          
-          - Based on the possibility for 2 CPs to trigger the execution of the function splitRfC() so one takes
-          ownership of a part of the RfC and of the completion of the aspect(s) of the content; 
-                ==> in the RfC is IERC1155 contract
-          - and on a delegate proof-of-stake mechanism (look and take for model something already existing - maybe
-          FEI protocol? and what the nice added to make it a compound staking? or more in the Tezos spirit (of delegation)
-          or something close and then try to implement you way - likely naive but who cares?)
-                ==> maybe a separate contract, or (more simple to deploy) in the ManageFunds.sol core contract
-        Make sure no 2 CP are working on the same tasks (at least unknowingly - if they 
-        to compete, they might as well do it)
-
-        The ERC20 staking delegation machanism to the escrow contracts is the core aspect
-        of this mechanism
-
-        Have to decide for CP choice:
-            - a first comes first serve simple selection?
-            - a round of commit + an investors' vote + a possible coordination through delegation
-            of the main CP contributor (biggest stake for now - KISS, please, KISS)?
-                ==> Stick to the "no fully fledged DAO implementation" on 1st iteration, 
-                so the choice holds to it.
-
-
-    */
-
-    //For now, simplified to biggest stake commited in the proposition round (in the idea that
-    // it can become then a delegator as it has the capital to cover the start, etc.)
-    function
 
 }
