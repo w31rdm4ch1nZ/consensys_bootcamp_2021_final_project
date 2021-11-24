@@ -159,7 +159,7 @@ according to the outcome market/predictive market. Doing so, think about your ne
 
 */
 
-
+/*
 pragma solidity ^0.5.1;
 
 import { IERC20 } from "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
@@ -170,15 +170,75 @@ import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155Pausable.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155Burnable.sol";
+*/
 
-contract ProductProvider is ERC1155 {          // The contract can call standard functions from the ERC-1155 (as I understand it so far)
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.2;
+
+import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155SupplyUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+
+import "@openzeppelin/contracts/token/ERC1155/ERC1155Pausable.sol";
+import "@openzeppelin/contracts/token/ERC1155/ERC1155Burnable.sol";
+
+contract ProductProvider is ERC1155, Initializable, ERC1155Upgradeable, OwnableUpgradeable, ERC1155SupplyUpgradeable, UUPSUpgradeable {          // The contract can call standard functions from the ERC-1155 (as I understand it so far)
     //Each type of content is linked to one or several protocols (Filecoin, Audius, LivePeer, etc.), each linked 
     //to a certain collateral that will allow the payment of the fees to become the medium of the content 
     // Make sure choosing it to be a data structure enum is still dynamic - otherwise choose a different way to build this so it can be dynamic, maybe by using an index that can take in 
     // input some data from th UI frontend - through web3.js or so, in a way that can't be tampered with (if it is even possible without using a central server, and is using the security
     // model of ethereum smart contract).
 
+    /*
+    
+            >>>>>>>>>>>>>>ollowing the openzeppelin wizard:<<<<<<<<<<<<<<<<<
+            
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() initializer {}
 
+    function initialize() initializer public {
+        __ERC1155_init("");
+        __Ownable_init();
+        __ERC1155Supply_init();
+        __UUPSUpgradeable_init();
+    }
+
+    function setURI(string memory newuri) public onlyOwner {
+        _setURI(newuri);
+    }
+
+    function mint(address account, uint256 id, uint256 amount, bytes memory data)
+        public
+        onlyOwner
+    {
+        _mint(account, id, amount, data);
+    }
+
+    function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
+        public
+        onlyOwner
+    {
+        _mintBatch(to, ids, amounts, data);
+    }
+
+    function _authorizeUpgrade(address newImplementation)
+        internal
+        onlyOwner
+        override
+    {}
+
+    // The following functions are overrides required by Solidity.
+
+    function _beforeTokenTransfer(address operator, address from, address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
+        internal
+        override(ERC1155Upgradeable, ERC1155SupplyUpgradeable)
+    {
+        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+    }
+
+    */
 
     /*
             >>>>
