@@ -10,8 +10,8 @@ What follows describes in quite some details the frozen idea: I have tried to de
  In my mind, this tokenization allows a pre-agreement or reaching consensus on most of the elements that will define the end-product this content creation market aims at facilitating, in the web3 context. 
  that lets much less work/subject to debate afterwards and doing so, it reduces the overhead and the need for trust that an off-chain governance would require otherwise, including a DAO, or even centralized third-party (only serving the proposals for instance).
 
- I am aware that this is not a new debated idea (and I don't know all that has been written or thought about it - i n fact, I am still very much playing
- with those ideas, so please be mindful of that and take it as a proposal, not a wholly thought through strategic design).
+ I am aware that this is not a new debated idea (and I don't know all that has been written or thought about it - in fact, I am still very much playing
+ with those ideas, a lot of the decisions had to be taken quickly, so please be mindful of that, and take it as a proposal, not a well thought through strategic design). It is very much experimental, and the fruit of my will to learn from some of the ideas that fascinate me the most in the "crypto"-space.
 
 
 **The design focuses on how to achieve 3 "Schelling points" or coordination points**:

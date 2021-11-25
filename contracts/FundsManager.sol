@@ -112,7 +112,7 @@ contract FundsManager {
     };
 
         /*
-        Coordination mechanism for Content Providers when several answer the RfC proposition:
+        Coordination mechanism for Content Providers when several accounts-CPs answer the RfC proposition:
           
           - Based on the possibility for 2 CPs to trigger the execution of the function splitRfC() so one takes
           ownership of a part of the RfC and of the completion of the aspect(s) of the content; 

@@ -289,16 +289,43 @@ contract ProductProvider is ERC1155, Initializable, ERC1155Upgradeable, OwnableU
     //Request for Content tokenization definition - check the way Gnosis tokenizes its "rich-logic/data tokens":
 
 
-
-    enum ContentType {
+    //mandatory
+    enum ContentTypeDelivered {
         NFT,
         LiveStream,
         Video,
         Audio,
         Article,
         Software
+        undefined               // => just used to disqualified a proposal before it reaches the proposal round (there will be also a grey/uncliclable 
+                                // are as long as the proposal don't include this mandatory field)
     }
 
+    //optional
+    enum subContentTypeFileFormats {
+        EthBlockTx,
+        jpg,
+        gif,
+        raw,
+        svg,
+        mp4,
+        mp3,
+        ogg,
+        txt,
+        pdf,
+        latex,
+        css
+        html
+        javascript,
+        typescript,
+        rust,
+        WindowsExe,
+        LinuxApp,
+        dockerizedImage,
+        undefined
+    }
+
+    //optional
     enum PlatformIntegrationAtDelivery {
         OpenSea,
         LivePeer,
@@ -306,20 +333,24 @@ contract ProductProvider is ERC1155, Initializable, ERC1155Upgradeable, OwnableU
         Filecoin,
         Arweave,
         Siacoin,
-        ...,
         undefined
     }
-    enum PlatformUsedToMintDeliverContent {
+
+    //mandatory
+    enum StoragePlatformUsedToDeliverContent {
         OpenSea,
         LivePeer,
         Audius,
         Filecoin,
         Arweave,
         Siacoin,
+        AWS,
+        Azure,
         ...,
         undefined
     }
 
+    // optional
     enum dataRetrievedAPIToBeUsed {
         Google,
         GoogleMap,
@@ -328,6 +359,8 @@ contract ProductProvider is ERC1155, Initializable, ERC1155Upgradeable, OwnableU
         undefined
     }
 
+    //mandatory => define further and more clearly the use of this choice of collateral => and maybe it will require more fields if it 
+    // has to be decided for several uses in the protocol
     enum Collateral {
         ETH,
         FIL,
@@ -338,6 +371,17 @@ contract ProductProvider is ERC1155, Initializable, ERC1155Upgradeable, OwnableU
         UST,
         DAI
     } 
+
+    // For the CPs time constraints AND maybe for instanting a time structure used in the FundsManagement contract (but that might just be defined in it) => both will be presented 
+    // in the web fronted so the users can agree on it (when user's choice is required - for Pendle and Compound, it might be irrelevant)
+    struct timeForDelivery {
+        // Like for a bond expiration date, those data are then used in both RfC delivery date constraint, and likely the data structure
+        // will be instantiated separately for the use in Pendle mechanics
+        hours nbHoursToDelivery,
+        days nbDaysToDelivery,
+        years nbYearsToDelivery,
+    }
+
 
     //then read (sequentially in memory) the struct so you can add (or not) those elements to the final RfC token: 
     struct Proofs {
