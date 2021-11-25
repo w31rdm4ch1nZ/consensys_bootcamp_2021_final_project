@@ -19,13 +19,18 @@
 
 contract UserRoles {
 
-    // user type (take into account they might be both at the same time)
+    //I would like to explore how to make this a separate, or if it is actually better to have a separate contract for it, or even if an openzeppelin 
+    // library contract exists, or a template?
 
-    enum UserType {
-        Investor,
-        ContentProvider,
-        undefuned
-    }
+    // It does not replace a multi-sig account for all or most of these roles
+
+    // user types for the ERC1155 token management (take into account they might be both at the same time)
+
+    bytes32 public constant URI_SETTER_ROLE = keccak256("URI_SETTER_ROLE");
+    bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
+    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
+
 
     mapping (addr => UserType)
 

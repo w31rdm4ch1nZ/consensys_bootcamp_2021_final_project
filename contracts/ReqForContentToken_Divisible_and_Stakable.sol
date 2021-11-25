@@ -1,5 +1,7 @@
 /*
 
+[[[IMPORTANT NOT TO FORGET THOSE NOTES AND ELEMENTS TAKEN FROM GNOSIS CONDITIONAL TOKEN >>>> READ IT AGAIN FOR THE FINAL SCAFFOLDING STEP]]]
+
 >>>>[[[[[11/23: IS NOW A MERGE OF BOTH ReqForContentToken_Divisible_and_Stakable.sol 
 AND RequestForContent_CoreLogic_ERC1155.sol]]]]]<<<<<
 
@@ -24,7 +26,7 @@ For now, a placeholder for the logic intervening when the Content Delivery event
         and lower with the more properties there are in the RfC).
 
 
-My RfC demands a ConditionalToken dedicated for the outcome being the successfull
+==> My RfC demands a ConditionalToken dedicated for the outcome being the successfull
  delivery of the content, or something very close.
 
 I see in Gnosis vision exactly the framework in which the RfC can be tought of.
@@ -147,11 +149,11 @@ Call balanceOfBatch() on your conditional tokens contract to check the balances 
 
     ==> One thing to think hard about: you should redefine the logic of your Request for Content from the Logic of Conditional Tokens, not mimic it.
     It means that the propertire of the RfC token itself (not the ones describing the content and the requirements associated to the delivery of this content)
-    should be taken into account and decide wha is the needed/required and likely the best way to implement it.
+    should be taken into account and decide what is the needed/required and likely the best way to implement it.
         => at this stage, "the needed" is enough. "The best" way to implement is not yet the current goal. (just to make simpler the design of this part and not
         spend too much time rn on this).
 
-Another great element of the Contitional Token to learn from isgoing from their splitPosition() to the mergePosition() and understand the mechanics to distribute the stakes
+Another great element of the Contitional Token is to learn from their splitPosition() to the mergePosition(), and understand the mechanics to distribute the stakes
 according to the outcome market/predictive market. Doing so, think about your needs.
 
     "The splitPosition() function has a corresponding inverse called mergePosition() which does exactly what it sounds like, 
@@ -184,6 +186,10 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155Pausable.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155Burnable.sol";
 
+//the upgradable pattern is chosen in the event of a real dapp evolution, as I would like a beta to be available to the public, 
+// but also that they keep their access to the contents and the shares on those contents produced in the beta phase, w/o a cumbersome 
+// upgrade and migration at their gas cost, and implying operations from those users that might be challenging for some. 
+
 contract ProductProvider is ERC1155, Initializable, ERC1155Upgradeable, OwnableUpgradeable, ERC1155SupplyUpgradeable, UUPSUpgradeable {          // The contract can call standard functions from the ERC-1155 (as I understand it so far)
     //Each type of content is linked to one or several protocols (Filecoin, Audius, LivePeer, etc.), each linked 
     //to a certain collateral that will allow the payment of the fees to become the medium of the content 
@@ -191,10 +197,19 @@ contract ProductProvider is ERC1155, Initializable, ERC1155Upgradeable, OwnableU
     // input some data from th UI frontend - through web3.js or so, in a way that can't be tampered with (if it is even possible without using a central server, and is using the security
     // model of ethereum smart contract).
 
-    /*
     
-            >>>>>>>>>>>>>>ollowing the openzeppelin wizard:<<<<<<<<<<<<<<<<<
-            
+    //        >>>>>>>>>>>>>>Following the openzeppelin wizard:<<<<<<<<<<<<<<<<<
+
+    //I will have to redefine some of the roles
+
+    // I prefer a role pattern with multi-sig accounts (that would evolve in theory towards some DAO councils-like owned roles)over the ownable pattern,
+    // where too much power is given to an account or even a simple role. Also, as I mentioned, if I were to see this dapp to evolve, I'd like a fully-fledged
+    // DAO-like governance (where needed), and so I see this role-based model as closer, hence easier to upgrade in the (hypotheticla) future of the dapp: 
+    bytes32 public constant URI_SETTER_ROLE = keccak256("URI_SETTER_ROLE");
+    bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
+    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() initializer {}
 
@@ -203,6 +218,12 @@ contract ProductProvider is ERC1155, Initializable, ERC1155Upgradeable, OwnableU
         __Ownable_init();
         __ERC1155Supply_init();
         __UUPSUpgradeable_init();
+
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(URI_SETTER_ROLE, msg.sender);
+        _setupRole(PAUSER_ROLE, msg.sender);
+        _setupRole(MINTER_ROLE, msg.sender);
+        _setupRole(UPGRADER_ROLE, msg.sender);
     }
 
     function setURI(string memory newuri) public onlyOwner {
@@ -237,8 +258,6 @@ contract ProductProvider is ERC1155, Initializable, ERC1155Upgradeable, OwnableU
     {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
-
-    */
 
     /*
             >>>>

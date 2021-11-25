@@ -1,7 +1,7 @@
 /*
 
     >>>>Waiting for a full DAO tooling, the most simplistic vote implementation you can think of so it can
-    work.<<<<
+    work for the few rounds it is required.<<<<
 
 */
 

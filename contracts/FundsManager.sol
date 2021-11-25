@@ -1,7 +1,9 @@
 /* 
 
-RETHINK WITH THE ReqForContentToken_Divisible_and_Stakable.sol Contract so those 2
+>>>>>>> RETHINK WITH THE ReqForContentToken_Divisible_and_Stakable.sol Contract so those 2
 EMBEDS THE CONTENT DELIVERY PROTOCOL CORE LOGIC IN A CLEAN (NON REDUNDANT, ..?) WAY 
+>>>>>>>
+
 
 1. Receive funds
  
