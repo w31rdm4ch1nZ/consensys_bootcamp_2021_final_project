@@ -38,8 +38,8 @@ contract Vote {
 //check this contract for outdated coding patterns (like will you use "throw here"?)
 pragma solidity ^0.8.0;
 
-/// @title Voting with delegation.
-contract VotingSchemes {
+/// @title Voting with delegation and with weight possibly modified under certain conditions (through parameters taken from other contracts like FundsManager for the staked/commited/under escrow funds).
+contract VoteAndDelegateCoordinationMechanisms {
     // This declares a new complex type which will
     // be used for variables later.
     // It will represent a single voter.
@@ -204,8 +204,8 @@ contract VotingSchemes {
 
     //2.2. Same case added to the function delegate(address _addr)
 
-    //3. Make those functions callable on a wide set of voters(-stakers)
+    //3. Make those functions callable on a wide set (all concerned) of voters(-stakers)
 
-    
+    //4. returns the outputs needed as inputs for the mint functions that need it in both ERC-1155_RfC and FundsManager contracts, and that's about it... 
 }
 
