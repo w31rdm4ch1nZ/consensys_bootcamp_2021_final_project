@@ -50,7 +50,19 @@ contract VoteAndDelegateCoordinationMechanisms {
         uint vote;   // index of the voted proposal
     }
 
-    // This is a type for a single proposal.
+    // "This is a type for a single proposal" => That is actually normally where your RfC comes in...
+    // It could be there that an *input is taken from the web UI frontend* and, after a transaction by the user submitting the input 
+    // (avoiding massive spamming through this frontend), passed to a function that allows it to be listed on the frontend
+    // and first proposed (before minting) to all user-investors on a defined period of 3 to 10 days (depending on the complexity 
+    // of the proposal - meaning, **complexity* = number of medium used to produce and display the content, 
+    // nb of platforms used under the hood (bc of costs usually associated with those), number of properties of the end product required (like the 
+    // nb of members the last dynamic array, the additional properties being the last member of our RfC struct*, for instance, a specific 
+    // file format, a specific definition of a video or picture (4K, 1080/740, ...), etc.)
+        // ==> more on a RfC design note: for each platform and medium, there will be a frontend set of possible propertied all presented as
+        // a constrained drop-down list between which the proposer can choose, and the investors, can agree to modify.
+        //  => important side-note, we want our frontend to be stored on a distributed p2p network so it cannot be tampered with, especially those
+        //      future inputs to our smart contracts and ERC-1155 contract to be minted eventually with those elements being then key to the
+        //      inner working of the content creation market.  
     struct Proposal
     {
         bytes32 name;   // short name (up to 32 bytes)

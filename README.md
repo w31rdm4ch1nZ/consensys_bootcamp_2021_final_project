@@ -2,9 +2,19 @@
 
 
 After several iteration over my inital idea (and definitely spending too much time on ideation),
-I came to freeze it for now - hardly... What follows describes in quite some details the frozen idea - I am seeking to define the implementation in several iterations, the 1st one being the scope for the Bootcamp Final Project, the others, are here to define what I'd like to expand in the coming months.
+I came to freeze it for now - hardly... 
 
-**The design focuses on how to achieve 3 "Schelling points" or coordination point**:
+What follows describes in quite some details the frozen idea: I have tried to define the implementation in several iterations, the 1st one being the scope for the Bootcamp Final Project, the others, are here to define directions I wish to expand this idea in the coming months.
+
+ It happened to be at firts a complete experiment, and I do now see it as building on *the general idea of the Gnosis Conditional Token framework core vision from complex structured knowledge to be tokenized and valued as such*.I
+ In my mind, this tokenization allows a pre-agreement or reaching consensus on most of the elements that will define the end-product this content creation market aims at facilitating, in the web3 context. 
+ that lets much less work/subject to debate afterwards and doing so, it reduces the overhead and the need for trust that an off-chain governance would require otherwise, including a DAO, or even centralized third-party (only serving the proposals for instance).
+
+ I am aware that this is not a new debated idea (and I don't know all that has been written or thought about it - i n fact, I am still very much playing
+ with those ideas, so please be mindful of that and take it as a proposal, not a wholly thought through strategic design).
+
+
+**The design focuses on how to achieve 3 "Schelling points" or coordination points**:
 1. defining a request for content, or more directly and simply stated, defining a content to be created (not yet existing) in a way that avoid disagreement on the content in the future;
 2. to agree on the value of a future content, from its production to its delivery (distribution/making it accessible);
 3. to agree on the value of the content to access (once created), for anyone - can range from "it's a *common good*" and 

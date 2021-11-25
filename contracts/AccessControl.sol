@@ -28,6 +28,13 @@ contract UserRoles {
 
     bytes32 public constant URI_SETTER_ROLE = keccak256("URI_SETTER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
+    // TO DO (v1): create a specific role like this (same 'power') dedicated to a CLAIM (for instance, there are reasonnable doubts of CPs trying 
+    // to game the protocol) -> enters an emergency round for vote on continuing or not, AND (then, the vote has to allow several outcomes, having
+    // several different consequences - like for the Condition Tokens in a predictive markets where several events can be voted on happening both, 
+    // or in a certain order, etc. => *the general idea of Gnosis from complex structured knowledge to be tokenized* (digression => in my mind, 
+    // this tokenization alows a pre-agreement or element of consensus that lets much less work/subject to debate afterwards and doing so, 
+    // reduce the overhead and the need for trust that an off-chain DAO, or even a central third-party, would require otherwise.)
+    //bytes32 public constant PAUSER_ALL_TXS_FOR_EMERGENCY_CLAIM_ROLE = keccak256("EMERGENCY_PAUSE_FOR_CLAIM_ROUND");  
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
 
