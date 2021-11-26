@@ -1,6 +1,6 @@
 /*
 
-Likely to be integrated in the FundsManagement contract (maybe kept spearate for better modularity, upgradability and readability)
+Likely to be integrated in the FundsManagement contract (maybe kept spearate for better modularity, upgradability and readability)?
 
 This step is the fundamental previous step to use Pendle contracts.
 
@@ -17,3 +17,12 @@ This step is the fundamental previous step to use Pendle contracts.
                     of ownership on contents produced through the platform.
 
 */
+
+// Tests to be done with the Rinkeby Testnet contracts addresses of Comppound and Pendle (check for compatibility of testnets of both Pendle and Compound - 
+// should be fine as Pendle is built on top of money markets as Compound and Aave)
+
+contract SwapFundsForCTokens {
+    //TO DO
+
+
+}
