@@ -36,9 +36,7 @@ What follows describes in quite some details the frozen idea: I have tried to de
 So, what are the mechanisms designed to achieve those 3/4 Schelling points/decentralized points on which coordination can be achieved and achieve the desired overall agreements (so our protocol becomes and stays viable and resilient over time):
 1. mechanisms:
    1. commit/staking mechanism: people know that their funds will be locked for some time, and possibly slashed in the case of non-desirable behaviors/outcome (not delivering content mostly at this point) - so it works as a pre-agreement to the content being proposed as defined following the RfC structure - that they all know at the 2nd phase of commitment (the 1st being the proposal, running only for days and aiming at being a simple signal);
-   2. 
-
-**[CURRENT CONTRACTS are empty shells with random notes and were taken before I go one more time through this design process]**
+   2. ?????
 
 ## For a bit of context on my motivations:
 
