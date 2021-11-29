@@ -1,0 +1,1 @@
+- I want my frontend to have a decentralized instance => I'll try to use fleek (https://fleek.co/) for that.

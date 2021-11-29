@@ -17,6 +17,9 @@
 
 */
 
+//Maybe, as those roles will be used in both core contracts (RfC and FundsManager), it could become an abstract contract or an interface: 
+// go back to those to see if it fits your design.
+
 contract UserRoles {
 
     //I would like to explore how to make this a separate, or if it is actually better to have a separate contract for it, or even if an openzeppelin 

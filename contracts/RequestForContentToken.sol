@@ -190,7 +190,7 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155Burnable.sol";
 // but also that they keep their access to the contents and the shares on those contents produced in the beta phase, w/o a cumbersome 
 // upgrade and migration at their gas cost, and implying operations from those users that might be challenging for some. 
 
-contract ProductProvider is ERC1155, Initializable, ERC1155Upgradeable, OwnableUpgradeable, ERC1155SupplyUpgradeable, UUPSUpgradeable {          // The contract can call standard functions from the ERC-1155 (as I understand it so far)
+contract RequestForContentToken is ERC1155, Initializable, ERC1155Upgradeable, OwnableUpgradeable, ERC1155SupplyUpgradeable, UUPSUpgradeable {          // The contract can call standard functions from the ERC-1155 (as I understand it so far)
     //Each type of content is linked to one or several protocols (Filecoin, Audius, LivePeer, etc.), each linked 
     //to a certain collateral that will allow the payment of the fees to become the medium of the content 
     // Make sure choosing it to be a data structure enum is still dynamic - otherwise choose a different way to build this so it can be dynamic, maybe by using an index that can take in 

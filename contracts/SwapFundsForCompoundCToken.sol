@@ -21,6 +21,11 @@ This step is the fundamental previous step to use Pendle contracts.
 // Tests to be done with the Rinkeby Testnet contracts addresses of Comppound and Pendle (check for compatibility of testnets of both Pendle and Compound - 
 // should be fine as Pendle is built on top of money markets as Compound and Aave)
 
+
+//This contract could be an interface designed for our FundsManager contract to interact with Compound (interesting pattern thinking here
+// it might indeed be easier to maintain as Compound and our Dapp core contract evolves (upgrades management)?).
+
+//It also could handle the swap of a crypto-currency such as Ether for a stablecoin such as DAI or FEI.
 contract SwapFundsForCTokens {
     //TO DO
 

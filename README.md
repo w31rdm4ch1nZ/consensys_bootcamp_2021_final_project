@@ -179,3 +179,9 @@ In a sentence: always seeking, including when a DAO intervenes, minimum interven
 
 Principle of minimum DAO intervention => protocol designed with some goals that are here to stay.
 The "How?" can in some circumstances be put to a DAO-like vote, there can be part of the protocols revenue that goes to a DAO's treasury, allowing for expenses directly related to the protocol maintenance, devlopment and time/context-awareness, or capable to adapt to changing conditions to maintain its goals.
+
+## License
+
+- [`LICENSE`](LICENSE) (GPL-3.0-only): see COPYING file.
+  
+[GPL-3.0-only] Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
