@@ -42,6 +42,6 @@ contract UserRoles {
     bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
 
 
-    mapping (addr => UserType)
+    //mapping (addr => UserType);
 
 }
