@@ -1,6 +1,6 @@
 # My Consensys 2021 Bootcamp Final Project
 
-[I'll clean this whole part, filled with some irrelevant notes and wyyyy too verbose :0]
+[I'll clean this whole part, filled with some irrelevant notes and wayyyy too verbose :0]
 
 After several iteration over my inital idea (and definitely spending too much time on ideation),
 I came to freeze it for now - hardly... 

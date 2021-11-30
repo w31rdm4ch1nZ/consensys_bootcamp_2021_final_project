@@ -33,6 +33,7 @@ EMBEDS THE CONTENT DELIVERY PROTOCOL CORE LOGIC IN A CLEAN (NON REDUNDANT, ..?) 
 
 */
 
+// See for the compiler you should use
 pragma solidity ^0.5.9;
 //the abicoder-v2, to allow for arbitrary nested arrays and structs to be encoded and decoded in calldata. => to research.
 pragma abicoder v2;
@@ -49,9 +50,18 @@ import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 */
 contract FundsManager {
 
-    //variables
-    address investor;
-    address[] contentProvider;
+    //3 types of funds sender to the contract, with possibly different funds management logics:
+    address public investor;
+    address public contentProvider;
+    address public contentConsumer;
+
+    //OR
+    address public protocolParticipant;
+    enum UserType{
+        Investor,
+        ContentProvider,
+        ContentConsumer
+    }
 
     mapping (address => uint256) balances;
 
@@ -77,6 +87,26 @@ contract FundsManager {
 
     //constructor
 
+    //a way to get the user's enrollment in a specific role/type - investor, CP or consumer, knowing it will engage them in a specific set of
+    // possible txs (through eventually a special input in tx's data, and signed by the user - but having this readable and clear for the user):
+    
+    // So, 2 steps process: ask for signature in one of the 3 different UIs/features (different ursl and/or buttons), then pop up a message (if possible
+    // in a Metamask pop-up), wich fetches the type in the tx's data (so even if data are somewhat tampered with, the user can read the actual type 
+    // they are about to enroll in, if they sign the tx):
+    
+    //build the tx in a way that can be fully integrated in the Metamask flow - check for a wrapper in data or how to build this wrapper (thinking the data
+    // will be passed - and checked on the 3 possible types - form the UI):
+    function buildTxMessageForUserSig(bytes _dataFromBytecodeTxBeforeUserSig) external returns(UserType userType, address _userAddress) {
+        //build 
+    }
+
+    // OR
+    function buildTxForUserType(bytes _dataUserType) 
+    
+    function enrollAs(address _account, bytes _fromDataFetchRealUserType) external returns () {
+        //To get/fetch the userType in the bytecode tx data field, do as Metamask does it for other displayed values such as, gasPrice, fees, etc.:
+
+    }
 
     //fallback and ..? functions
 
