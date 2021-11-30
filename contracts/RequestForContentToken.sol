@@ -228,6 +228,9 @@ contract RequestForContentToken is ERC1155, Initializable, ERC1155Upgradeable, O
         _setupRole(UPGRADER_ROLE, msg.sender);
     }
 
+
+
+
     function setURI(string memory newuri) public onlyOwner {
         _setURI(newuri);
     }
@@ -268,6 +271,32 @@ contract RequestForContentToken is ERC1155, Initializable, ERC1155Upgradeable, O
                 PROPOSALS
             <<<<< 
     */
+
+    //events
+    /// @dev Emitted upon the successful preparation (its definition and acceptation by investors through their financial commitment, 
+    ///         CP(s) comitting to delivery) of a Request for Content.
+    /// @param RfCId The condition's ID. This ID may be derived from the other three parameters via ``keccak256(abi.encodePacked(oracle, questionId, outcomeSlotCount))``.
+    //MIGHT BE REPLACED BY A VOTE RESULT OR AUTOMATED CONTROLS VALIDATED make that useless. Anyway an oracle won't be used as such in my use case. 
+    //    [/// @param oracle The account assigned to report the result for the prepared condition.]
+    //CHECK THAT LATER (what would it be in our case: rn, just wnat to define a bit better the actual mechanics of the RfC/ERC1155)    
+    //    [/// @param questionId An identifier for the question to be answered by the oracle.]
+    /// @param RfCComponentsCount The number of outcome slots which should be used for this condition. Must not exceed 256.
+    event RfCValidation(
+        bytes32 indexed RfCId,      // maybe no need of this extra-complexity there: just use a simple uint id to refer to a RfC token, and then use your enums
+                                    // to build an array of enums (or a struct using the enums defined) that represents the RfC in its simple structured info,
+                                    // than can be then used to define a set of simple requirements (eg. must be a content streamed on Livepeer, etc.) 
+        //address indexed oracle,
+        bytes32 indexed RfCDefinitionId,
+        uint RfCComponentsCount
+    );
+
+    event RfCDeliveryEvaluationOutcome(
+        bytes32 indexed RfCId,
+        //address indexed oracle,
+        bytes32 indexed RfCDefinitionId,
+        uint RfCComponentsCount,
+        uint[] payoutNumerators
+    );
 
     //Phases/Cycles/Steps of the Content delivery:
     enum DeliveryStatus {
@@ -441,8 +470,24 @@ contract RequestForContentToken is ERC1155, Initializable, ERC1155Upgradeable, O
         //TO DO
     };
 
-    //function splitRfC (to be called by mint function?)
-    function splitRfC() internal returns() {
+    function reportRfCPayouts() external {
+        //TO DO
+    }
+
+    /// @dev This function splits RfC in the case a subset of the required components are to be delegated among several CPs. (I will limit for now the use case to that)
+    //    REWORK for your RfC instead [/// @dev This function splits a position. If splitting from the collateral, this contract will attempt to transfer `amount` collateral from the message sender to itself. Otherwise, this contract will burn `amount` stake held by the message sender in the position being split worth of EIP 1155 tokens. Regardless, if successful, `amount` stake will be minted in the split target positions. If any of the transfers, mints, or burns fail, the transaction will revert. The transaction will also revert if the given partition is trivial, invalid, or refers to more slots than the condition is prepared with.]
+
+    /// @param RfCcollateralToken The address of the positions' backing collateral token.
+    /// @param partition An array of disjoint index sets representing a nontrivial partition of the outcome slots of the given condition. E.g. A|B and C but not A|B and B|C (is not disjoint). Each element's a number which, together with the condition, represents the outcome collection. E.g. 0b110 is A|B, 0b010 is B, etc. 
+    ///         => adapt it to your
+    /// @param amount The amount of collateral or stake to split.
+    function splitRfC(
+        IERC721 setOfTasksDelegated,
+        uint calldata RfCId,
+        IERC20 RfCcollateralizedToken,
+        uint[] calldata partition,
+        uint amount
+    ) internal returns() {
         //TO DO
         
         /*split pattern: mandatory fields (1st token) / offset -> property X = 2nd token / etc.
@@ -466,6 +511,8 @@ contract RequestForContentToken is ERC1155, Initializable, ERC1155Upgradeable, O
                     I will not need this (overhead and un/de-coordinated behavior - very difficult it seems to get afterwards except by 
                     very costly outcomes like "redo or cancel"...).
         */
+
+        // with the parameters, mint() subsets of tokens as other ERC1155 that represents CPs RfC new positions and ERC20 staked/commited new positions.
     }
 
     function mergeEl() internal returns() {  // might be called in 2 instances:

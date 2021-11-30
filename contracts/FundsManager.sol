@@ -60,10 +60,13 @@ contract FundsManager {
     //set of amount states value necessary for our various use cases that will be used as input to mint our RfC 1155 tokens
     // (ex: minting an NFT and somr ERC-20 and sending both to a user for an art project that wants to give back to the investors
     // through the artwork + some of the benefits made during the drop, or after; ):
-    uint256 public investoFunds;
-     
+    uint256 public investorFunds;
+    uint256 public investorTotalPooledFunds;    // defined only for 1 RfC for now (might rethink later the mechanics so the logic would be extended over different 
+                                                // pools for a single investor - more capital efficient for each investor (like pooled txs, compounded rewards,
+                                                // lower fees, etc.))
 
-    //OR
+
+    // OR
     address public protocolParticipant;
     enum UserType{
         Investor,
