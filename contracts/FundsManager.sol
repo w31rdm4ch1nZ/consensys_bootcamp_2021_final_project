@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-only
+
 /* 
 
 >>>>>>> RETHINK WITH THE ReqForContentToken_Divisible_and_Stakable.sol Contract so those 2
@@ -34,7 +36,7 @@ EMBEDS THE CONTENT DELIVERY PROTOCOL CORE LOGIC IN A CLEAN (NON REDUNDANT, ..?) 
 */
 
 // See for the compiler you should use
-pragma solidity ^0.5.9;
+pragma solidity ^0.8.2;
 //the abicoder-v2, to allow for arbitrary nested arrays and structs to be encoded and decoded in calldata. => to research.
 pragma abicoder v2;
 
@@ -54,6 +56,12 @@ contract FundsManager {
     address public investor;
     address public contentProvider;
     address public contentConsumer;
+
+    //set of amount states value necessary for our various use cases that will be used as input to mint our RfC 1155 tokens
+    // (ex: minting an NFT and somr ERC-20 and sending both to a user for an art project that wants to give back to the investors
+    // through the artwork + some of the benefits made during the drop, or after; ):
+    uint256 public investoFunds;
+     
 
     //OR
     address public protocolParticipant;
