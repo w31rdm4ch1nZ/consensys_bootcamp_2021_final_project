@@ -95,7 +95,13 @@ contract FundsManager {
     // they are about to enroll in, if they sign the tx):
     
     //build the tx in a way that can be fully integrated in the Metamask flow - check for a wrapper in data or how to build this wrapper (thinking the data
-    // will be passed - and checked on the 3 possible types - form the UI):
+    // will be passed - and checked on the 3 possible types - form the UI).
+    // What I will do:
+    // - have the send tx and put in the data field the value that encodes the user's type (encoding to be defined)
+    // - check 1st that ther is one of the 3 possible value, otherwise, tx cancelled with error message displayed to the user
+    // - final tx pop-up for user's confirm (sig) is displaying the user's type chosen, user's type (for security reasons stated before) being directly 
+    //      fetched in the data field.
+    // OR maybe just have distinct functions called for each user's tytpe (so the data field indeed includes already the functiona nd its parameters)
     function buildTxMessageForUserSig(bytes _dataFromBytecodeTxBeforeUserSig) external returns(UserType userType, address _userAddress) {
         //build 
     }
