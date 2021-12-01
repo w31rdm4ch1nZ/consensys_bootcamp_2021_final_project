@@ -9,9 +9,13 @@ EMBEDS THE CONTENT DELIVERY PROTOCOL CORE LOGIC IN A CLEAN (NON REDUNDANT, ..?) 
 
 
 1. Receive funds
- 
-2. Pools funds once a RfC has gone through the validation process, keeping track separately (2 mapping state variable probably)
-    for user-investors and CPs.
+
+2. Once a RfC has gone through the validation process:
+    2.1. swap funds sent for a stablecoin (FEI if possible and simple) 
+        - !!!!!>>>>????? Might just call Uniswap swap contract function? See if it's done like that in other projects:
+    2.2. Pools those funds once a RfC has gone through the validation process, keeping track separately (2 mapping state variable probably)
+    for user-investors and CPs. 
+    2.3 Pooled tokens "swapped"/transferred to Compound and get the cToken back.
 
 3. Call Pendle functions to handle the pooled funds and use the mechanism for FutureYield tokens and their AMM. 
     => Swap it according to a logic linked to the inputs (check Pendle's ABI and the function's inputs accordingly):
@@ -139,6 +143,8 @@ contract FundsManager {
 
     // approval functions for the contract to manage the funds and 1st interact with a wallet (here Metamask)
 
+    //commit scheme to signal interest and intensity of this interest for a RfC by investors:
+
     function receiveFunds() public payable returns (bool depositSuccess) {
         //1st function to handle every deposit = before any user's classification, or any swap or tapping in any yield protocol.
         // Simple purpose: receive safely any deposit, and having it ready to be usable (pulled by other more advanced functions)
@@ -162,7 +168,7 @@ contract FundsManager {
     } 
 
     //user-investors functions related to funds management is initiated through the investors' web UI and Metamask confirmation (sig)
-    function receiveInvestorsFunds(address _sender, uint256 _amount) external payable isInvestor returns() {
+    function manageInvestorsFunds(address _sender, uint256 _amount) external payable isInvestor returns() {
         //metadata recording to facilitate the management of the funds of the user-investors,
         // and the tracking of the investors position through an NFT minted
         timeOfDeposit = time.?;
@@ -171,7 +177,7 @@ contract FundsManager {
 
     };
 
-    function receiveCPsFunds(address _sender, uint256 _amount) external payable isContentProvider returns() {
+    function manageCPsFunds(address _sender, uint256 _amount) external payable isContentProvider returns() {
         //specific metadata reagrding the deposit so the fund management automation can be done properly, 
         // and the tracking of the CP position through an NFT minted
 
@@ -251,7 +257,8 @@ contract FundsManager {
         <<<<<
     */
 
-
+    //LIKELY: JUST USE COMPOUND for 1st iteration, and keep something like Pendle for later iterations
+    //>>>> PENDLE MAIN USE CASE: being able to secure a fixed-rate yield, and possibly top it off with a variable bonus at expiration date of the YToken?
     //<<<<<<Pendle functions contract ABI calls>>>>> - see docs (if the AMM is not worth it, maybe better to do it by yourself directly working with Compound or 
     // Aave tokens and tokenized future yields)
     /*
@@ -393,7 +400,7 @@ contract FundsManager {
     */  
 
 
-    //commit scheme to signal interest and intensity of this interest for a RfC:
+    
 
 
 
