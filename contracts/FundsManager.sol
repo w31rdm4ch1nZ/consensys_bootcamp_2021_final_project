@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
+ 
 /* 
 
 >>>>>>> RETHINK WITH THE ReqForContentToken_Divisible_and_Stakable.sol Contract so those 2
@@ -50,28 +51,27 @@ import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 /* [[Check the design as the ERC1155 inehirted contract should bear most of the heavy lifting, including all minting. 
     Maybe only when RfC comes to be minted, then it takes full control over the mechanisms]]
 */
-contract FundsManager {
 
-    //3 types of funds sender to the contract, with possibly different funds management logics:
-    address public investor;
-    address public contentProvider;
-    address public contentConsumer;
+//This contract acts like a bank (more than an escrow) where clients are investors and CPs, on steroids because using crypto money markets for yields.
+contract FundsManager {
 
     //set of amount states value necessary for our various use cases that will be used as input to mint our RfC 1155 tokens
     // (ex: minting an NFT and somr ERC-20 and sending both to a user for an art project that wants to give back to the investors
     // through the artwork + some of the benefits made during the drop, or after; ):
-    uint256 public investorFunds;
+    uint256 public investorBalance;
     uint256 public investorTotalPooledFunds;    // defined only for 1 RfC for now (might rethink later the mechanics so the logic would be extended over different 
                                                 // pools for a single investor - more capital efficient for each investor (like pooled txs, compounded rewards,
                                                 // lower fees, etc.))
 
-
-    // OR
+    //for all individual partcipant account state tracking:
     address public protocolParticipant;
-    enum UserType{
-        Investor,
-        ContentProvider,
-        ContentConsumer
+
+    //to distinguish among the participants between our 3 types of participant (all users will be qualified based on tghe transactions conducted, implying 
+    // some funds commitment - so that it is safe to assume they are Investor, or simple Consumer)
+    struct UserType{
+        address Investor;
+        address ContentProvider;
+        address ContentConsumer;
     }
 
     mapping (address => uint256) balances;
@@ -82,6 +82,22 @@ contract FundsManager {
                                             // IRequestForContent public immutable RfC)
 
     //modifiers
+
+    // Those three will enable a control over the feature accessed by our different type of users, both for use and security reasons:
+    modifier isInvestor{
+        require(protocolParticipant == UserType.Investor, "It requires a user being an 'investor' to make this transaction");
+        _;
+    }
+
+    modifier isContentProvider{
+        require(protocolParticipant == UserType.ContentProvider, "It requires a user to be a 'Content Provider' to make this transaction");
+        _;
+    }
+
+    modifier isContentConsumer{
+        require(protocolParticipant == UserType.ContentConsumer, "It requires a user to be a 'Content Consumer' to make this transaction");
+        _;
+    }
 
     //events
     event WalletFundsApproved();
@@ -98,6 +114,7 @@ contract FundsManager {
 
     //constructor
 
+    /* FOUND A SIMPLER WAY: cf. comment before struct UserType!!!
     //a way to get the user's enrollment in a specific role/type - investor, CP or consumer, knowing it will engage them in a specific set of
     // possible txs (through eventually a special input in tx's data, and signed by the user - but having this readable and clear for the user):
     
@@ -124,12 +141,13 @@ contract FundsManager {
         //To get/fetch the userType in the bytecode tx data field, do as Metamask does it for other displayed values such as, gasPrice, fees, etc.:
 
     }
+    */
 
     //fallback and ..? functions
 
     // approval functions for the contract to manage the funds and 1st interact with a wallet (here Metamask)
 
-    //user-investors functions related to funds management
+    //user-investors functions related to funds management is initiated through the investors' web UI and Metamask confirmation (sig)
     function receiveInvestorsFunds(address _sender, uint256 _amount) external payable returns() {
         //metadata recording to facilitate the management of the funds of the user-investors,
         // and the tracking of the investors position through an NFT minted
