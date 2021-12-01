@@ -218,10 +218,32 @@ contract VoteAndDelegateCoordinationMechanisms {
         //TO DO
     }
 
-    //2.2. Same case added to the function delegate(address _addr)
+    //2.2. Same case added to the function delegate(address _addr) [likely I am going to pass on delegation on the 1st iteration]
 
     //3. Make those functions callable on a wide set (all concerned) of voters(-stakers)
 
     //4. returns the outputs needed as inputs for the mint functions that need it in both ERC-1155_RfC and FundsManager contracts, and that's about it... 
+
+
+    //!!!!!DOABLE!!!!! So be it!!
+    //to delegate, a CP can put to auction rthe subset of RfC components/requirements (reverse Dutch-auction where the bidders are bidding the amount they require to take the delegated subset
+    // of tasks = RfC split + attached ERC-20 amount + sent to the winning bidder => the one *to accept a price*. Start price is determined by the CP
+    // delegating, and end/rest price also.). The important is to give a maximum amount of capital, and some time for the different potential delegatee
+    // to take the subset, and compete for the price (so it is not overpriced, neither without ...) 
+    function auctionDelegationRfCSubset
+        (
+        uint _RfCsplitId, 
+        uint _startPrice, 
+        uint _restPrice, 
+        uint _amountAllocatedByDelegator
+        ) internal
+        returns (bool auctionSuccess, uint priceTaken) {
+        //TO DO
+
+        //Decide of how to present information in the frontend
+        //see what's best to use on an auction to display (in the UI eventually) the time passing and the corresponding price  
+
+        //CP delegator sends amount
+    }
 }
 

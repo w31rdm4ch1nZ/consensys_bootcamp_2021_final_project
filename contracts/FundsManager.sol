@@ -108,7 +108,7 @@ contract FundsManager {
     //EVENTS
     event WalletFundsApproved();
     
-    event FundsReceived();
+    event FundsReceived(address account);
 
     event FundsDepositedToPool();
 
