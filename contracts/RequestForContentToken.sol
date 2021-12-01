@@ -298,7 +298,7 @@ contract RequestForContentToken is ERC1155, Initializable, ERC1155Upgradeable, O
         uint[] payoutNumerators
     );
 
-    //Phases/Cycles/Steps of the Content delivery:
+    //(Phases/Cycles/Steps/)**Components that can translated *unambiguously* in a requirement** for the Content delivery:
     enum DeliveryStatus {
         investorsVote,
         cancelled,  //can happen at several stage on a mechanism of coordination between investors (that you might not implement

@@ -66,6 +66,12 @@ contract FundsManager {
     //for all individual partcipant account state tracking:
     address public protocolParticipant;
 
+    //1st, simple, deposit to the contract (also an event):
+    //to "get" the addresses of users with deposits in the contract:
+    mapping (address => bool) public userHaveFundsDeposited;
+
+    //
+
     //to distinguish among the participants between our 3 types of participant (all users will be qualified based on tghe transactions conducted, implying 
     // some funds commitment - so that it is safe to assume they are Investor, or simple Consumer)
     struct UserType{
@@ -81,7 +87,7 @@ contract FundsManager {
     RequestForContent public RfC;           // maybe call throuhgh an interface (making it easier to upgrade and callable by other contracts: 
                                             // IRequestForContent public immutable RfC)
 
-    //modifiers
+    //MODIFIERS
 
     // Those three will enable a control over the feature accessed by our different type of users, both for use and security reasons:
     modifier isInvestor{
@@ -99,7 +105,7 @@ contract FundsManager {
         _;
     }
 
-    //events
+    //EVENTS
     event WalletFundsApproved();
     
     event FundsReceived();
@@ -114,41 +120,49 @@ contract FundsManager {
 
     //constructor
 
-    /* FOUND A SIMPLER WAY: cf. comment before struct UserType!!!
-    //a way to get the user's enrollment in a specific role/type - investor, CP or consumer, knowing it will engage them in a specific set of
-    // possible txs (through eventually a special input in tx's data, and signed by the user - but having this readable and clear for the user):
     
-    // So, 2 steps process: ask for signature in one of the 3 different UIs/features (different ursl and/or buttons), then pop up a message (if possible
-    // in a Metamask pop-up), wich fetches the type in the tx's data (so even if data are somewhat tampered with, the user can read the actual type 
-    // they are about to enroll in, if they sign the tx):
-    
-    //build the tx in a way that can be fully integrated in the Metamask flow - check for a wrapper in data or how to build this wrapper (thinking the data
-    // will be passed - and checked on the 3 possible types - form the UI).
-    // What I will do:
-    // - have the send tx and put in the data field the value that encodes the user's type (encoding to be defined)
-    // - check 1st that ther is one of the 3 possible value, otherwise, tx cancelled with error message displayed to the user
-    // - final tx pop-up for user's confirm (sig) is displaying the user's type chosen, user's type (for security reasons stated before) being directly 
-    //      fetched in the data field.
-    // OR maybe just have distinct functions called for each user's tytpe (so the data field indeed includes already the functiona nd its parameters)
-    function buildTxMessageForUserSig(bytes _dataFromBytecodeTxBeforeUserSig) external returns(UserType userType, address _userAddress) {
-        //build 
-    }
-
-    // OR
-    function buildTxForUserType(bytes _dataUserType) 
-    
-    function enrollAs(address _account, bytes _fromDataFetchRealUserType) external returns () {
-        //To get/fetch the userType in the bytecode tx data field, do as Metamask does it for other displayed values such as, gasPrice, fees, etc.:
-
-    }
-    */
-
     //fallback and ..? functions
+    //Not sure I'll keep this function - should handle every tx sending ethers more gracefully
+    function () external payable {
+        revert();
+    }
+    
+    //>>>>Same, not sure I keep this direct call from any user on this contract...<<<<
+    /// @notice a user can read the value of funds held by the contract (before they are put in the "management cycle")
+    /// @return The balance of the user
+    function getBalance() public view returns (uint) {
+      // 1. A SPECIAL KEYWORD prevents function from editing state variables;
+      //    allows function to run locally/off blockchain
+      // 2. Get the balance of the sender of this transaction
+      return balances[msg.sender];
+    }
 
     // approval functions for the contract to manage the funds and 1st interact with a wallet (here Metamask)
 
+    function receiveFunds() public payable returns (bool depositSuccess) {
+        //1st function to handle every deposit = before any user's classification, or any swap or tapping in any yield protocol.
+        // Simple purpose: receive safely any deposit, and having it ready to be usable (pulled by other more advanced functions)
+        userHaveFundsDeposited[msg.sender] = true;
+        emit FundsReceived(msg.sender);
+
+        /*
+        Logic that allows to distinguish between users eventually, but first between the type of transaction asked (all tx return a message to the user for 
+        their confirmation so they know what type of tx they commit to):
+            - commit for RfC proposal (-> user gets type investor);
+            - commmit for RfC acceptation (instead of voting, it is a "ready_to_stake scheme", or staging for commit to invest directly in a specific RfC ->
+                user gets type investor);
+            - commit for minting the RfC ERC1155 token (-> user gets type investor);
+            - commit for being responsible for the content creation (-> user gets type Content Provider - 1st agree on time to deliver, type/medium of content at
+                delivery, storage requirement of the content => it defines on what specifics the slashing/punishment will happen for the CP if they don't 
+                respect one of the following components/requirements of the request);
+            - commit to handle a subset of the RfC components and requirements attached (-> user gets type Content Provider);
+        */
+        
+        return userHaveFundsDeposited[msg.sender];
+    } 
+
     //user-investors functions related to funds management is initiated through the investors' web UI and Metamask confirmation (sig)
-    function receiveInvestorsFunds(address _sender, uint256 _amount) external payable returns() {
+    function receiveInvestorsFunds(address _sender, uint256 _amount) external payable isInvestor returns() {
         //metadata recording to facilitate the management of the funds of the user-investors,
         // and the tracking of the investors position through an NFT minted
         timeOfDeposit = time.?;
@@ -157,7 +171,7 @@ contract FundsManager {
 
     };
 
-    function receiveCPsFunds(address _sender, uint256 _amount) external payable returns() {
+    function receiveCPsFunds(address _sender, uint256 _amount) external payable isContentProvider returns() {
         //specific metadata reagrding the deposit so the fund management automation can be done properly, 
         // and the tracking of the CP position through an NFT minted
 
