@@ -16,18 +16,21 @@ EMBEDS THE CONTENT DELIVERY PROTOCOL CORE LOGIC IN A CLEAN (NON REDUNDANT, ..?) 
     2.2. Pools those funds once a RfC has gone through the validation process, keeping track separately (2 mapping state variable probably)
     for user-investors and CPs. 
     2.3 Pooled tokens "swapped"/transferred to Compound and get the cToken back.
+        => cf. below the scaffolding
 
-3. Call Pendle functions to handle the pooled funds and use the mechanism for FutureYield tokens and their AMM. 
+3. [NOW CONSIDERED FOR NEXT ITERATION/AFTER FINAL PROJECT] 
+    Call Pendle functions to handle the pooled funds and use the mechanism for FutureYield tokens and their AMM. 
     => Swap it according to a logic linked to the inputs (check Pendle's ABI and the function's inputs accordingly):
       - "starting time of the deposit for yield of tokens", 
       - "time to maturity/redeem"
       - "amount"
       - "..."
  
-4. Receive what Pendle returns under a tokenized form yet to be defined - by going through their doc and testing what you
+4. [NOW CONSIDERED FOR NEXT ITERATION/AFTER FINAL PROJECT] 
+    Receive what Pendle returns under a tokenized form yet to be defined - by going through their doc and testing what you
     can do with their ABI.
 
-5. - Tokens distribution Logic for User-investore in case of failing to deliver on teh CPs side
+5. - Tokens distribution Logic for User-investore in case of failing to deliver on the CPs side
    - Symmetric Logic applying to the CPs commited = slashing a ratio of what they have commited.
 
 6. - Token distribution Logic for the CPs when the outcome is "yes/true", that is the content was delivered.
@@ -48,7 +51,7 @@ pragma abicoder v2;
 
 //import ERC1155.sol and IERC1155 from OpenZeppelin library, or more likely: use it as a template, and configuren for the need of RfC
 
-//import required by Pendle:
+//import required by Pendle (likely to keep Pendle mechanics integration off the table for 1st iteration/Final Project):
 import './IPendleRouter.sol';
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
@@ -114,13 +117,16 @@ contract FundsManager {
     
     event FundsReceived(address account);
 
-    event FundsDepositedToPool();
+    event investorsFundsPooled();
+    event CPsFundsPoooled();
 
-    event FundsSwappedToX();
+    event FundsSwappedToStablecoin();
 
+    /*
     event YieldTokenized();
 
     event PendleCalledSuccess(uint256 numberOfYT, uint256 YTvalueAtTimeOfDeposit, ...);
+    */
 
     //constructor
 
@@ -141,10 +147,11 @@ contract FundsManager {
       return balances[msg.sender];
     }
 
-    // approval functions for the contract to manage the funds and 1st interact with a wallet (here Metamask)
+    // approval functions for the contract to manage the funds and 1st interact with a wallet (here Metamask) => maybe off-chain, through metamask
 
-    //commit scheme to signal interest and intensity of this interest for a RfC by investors:
+    //TBD: commit scheme to signal interest and intensity of this interest for a RfC by investors
 
+    //1. sent funds contract receiving function (the 'commit event' in cases of investors and CPs):
     function receiveFunds() public payable returns (bool depositSuccess) {
         //1st function to handle every deposit = before any user's classification, or any swap or tapping in any yield protocol.
         // Simple purpose: receive safely any deposit, and having it ready to be usable (pulled by other more advanced functions)
@@ -167,6 +174,35 @@ contract FundsManager {
         return userHaveFundsDeposited[msg.sender];
     } 
 
+    //2. swap (all) pooled funds for stablecoin, that has to be supported by Compound atm (for investors and CPs use case - except all cases where instant payment can take place, so no need for swap 
+    //  and gas price to happen ) once an RfC is tokenized/minted (adding a modifier RfCTokenMinted()):
+        // The question of a protocol native stablecoin is still TBD in the next developments, as it has its rationale, but adds too much complexity rn
+    function swapToStablecoin(
+        string _tickerStablecoin, 
+        uint _amount, 
+        uint _pooledFundsId/* not sure how to implement the pool yet*/
+        ) 
+        internal returns(uint amountUSDStablecoin) {
+
+            //TO DO
+
+            //call to Uniswap contract? Check if there is a way to do it all in Compound
+
+            //event emitted on successful swap
+            emit StablecoinswapSuccess();
+
+            //pooled capital state updated to reflect the "frozen value"/stablecoin value
+
+            //return this value and the address to 
+        }
+
+    //3. Call to compound contract to deposit stablecoin and earn on it - which returns cTokens, kept under escrow by this contract 
+    //  Take a closer look at the Compound.js wrappers to see if you can do it in the most simple way.
+
+    //4. Call to/from RfC contract to makes those pooled cTokens part of the RfC token (maybe using the ownable token interface in proposition state)
+    
+     
+
     //user-investors functions related to funds management is initiated through the investors' web UI and Metamask confirmation (sig)
     function manageInvestorsFunds(address _sender, uint256 _amount) external payable isInvestor returns() {
         //metadata recording to facilitate the management of the funds of the user-investors,
@@ -187,14 +223,60 @@ contract FundsManager {
 
     function poolingFunds() internal returns() {};
 
+    //5.1  if RfC delivered successfully,
+
+    //5.1.1 mint content NFT or access to content NFT for the investors + shares on content earned by the investors (tracked through same mechanism as 
+    //  Uniswap LPs share NFT mechanism) granted because of their contribution
+
+    //  (a second function - might also encoded in the same function - regards
+    //  providing acces to any users => likely separately so you implement the flow for a user to access content (simple payment, access token (NFT)
+    //  and distribution of the payment between investors shares on this content, CP(s) involved in the content production, and fees for the actual
+    //  platform(s) hosting the content (filecoin/IPFS, LivePeer, etc.)))  
+
+    //5.1.2. CPs payment once content minted and accessed by investors + get some of the yield gained through cTokens with which they can 
+    //  tune up a bit their business model (perks for investors, perks for future users accessing the content, etc. => a limited /contrained and 
+    //  trustless amount of options proposed through their web UI/dashboard)
     function payCPs(uint256 _amountFundsXyield, address CPaddr) internal returns(bool successPayment) {
+
+        //Calculate CP payment (cf. what you already defined to foactor in that calculation)
 
         //One CP payment once content is delivered
 
         //Case of a part or all content delivery **delegated** by the CP who first commited for RfC mint  
-
+        // TO DO for next iteration
 
     };
+
+    // 5.2 The RfC is not delivered or accepted:
+
+    // 5.2.1 Redeem investors funds
+
+    // 5.2.2 Slash a part of the CPs capital commited to this contract
+
+    /*
+        >>>>>
+            LAST IMPORTANT PIECE OF YOUR 1ST ITERATION:
+            THE "PROTOCOL CONTROLLED VALUE" (PCV), OR THE VALUE ACCRUED
+            BY THE PROTOCOL OVER TIME THROUGH A RATIO TAKEN ON SOME TRANSACTIONS
+            (BE VERY CAREFUL AT HOW THAT MIGHT IMPACT THE INCENTIVE OF THE
+            ESSENTIAL PARTICIPANTS TO THE PROTOCOL - INVESTORS AND CONTENT PROVIDERS) 
+                => see how it is implemented in FEI protocol
+        <<<<<
+    */
+    
+    //6.1. redeem investors payments and yield earned to the protocol as "Protocol Controled Value" (cf. FEI contract if you have time) (which
+    //  will mostly be used for granting access to everyone to a specific content, deemed to belong "the common"/public (a common good)) 
+    function transferToProtocolFundsControlled() internal {
+        //TO DO
+    }
+
+    //6.2 In the event of 5.2, distribute CPs slashed funds between investors and PCV 
+        //  (TBD in next iteration: or propose a new proposition to CPs round for the RfC to be accepted 
+        //  + the case for RfC enrichment/content or information added to a specific RfC or even a set of RfC 
+        // (case of investigative journalism/crowdjournalism/open journalism))
+    function distributeSlashedCPsFunds() internal {
+        //TO DO
+    }
 
         /*
         Coordination mechanism for Content Providers when several accounts-CPs answer the RfC proposition:
@@ -219,14 +301,12 @@ contract FundsManager {
                 ==> Stick to the "no fully fledged DAO implementation" on 1st iteration, 
                 so the choice holds to it.
 
-
     */
 
     //For now, simplified to biggest stake commited in the proposition round (in the idea that
     // it can become then a delegator as it has the capital to cover the start, etc.)
 
-    // Write functions for the Delegation proof-of-satke mechanism,
-    //  to have several CPs coordinating on different aspect of the RfC
+   
 
     // Design of the CP(s) commit phase:
     function CPCommitSignal(address _CP,uint256 _amount) internal returns() {
@@ -242,26 +322,29 @@ contract FundsManager {
     // proposal ends up having several CPs answering -> RfC split proposition (then exact split has to be accepted by
     // every CPs deciding to commit, with an order of importance (deciding of the dPOS: delegator -> delegatee) that goes
     // from mandatory fields to properties a-z ->  
-
-
-    function splitCPsFundsForDelegatees(RequestFoContent ) internal resturns() {};
-
     
-    /*
-        >>>>>
-            LAST IMPORTANT PIECE OF YOUR 1ST ITERATION:
-            THE "PROTOCOL CONTROLLED VALUE" (PCV), OR THE VALUE ACCRUED
-            BY THE PROTOCOL OVER TIME THROUGH A RATIO TAKEN ON SOME TRANSACTIONS
-            (BE VERY CAREFUL AT HOW THAT MIGHT IMPACT THE INCENTIVE OF THE
-            ESSENTIAL PARTICIPANTS TO THE PROTOCOL - INVESTORS AND CONTENT PROVIDERS) 
-        <<<<<
-    */
 
-    //LIKELY: JUST USE COMPOUND for 1st iteration, and keep something like Pendle for later iterations
-    //>>>> PENDLE MAIN USE CASE: being able to secure a fixed-rate yield, and possibly top it off with a variable bonus at expiration date of the YToken?
-    //<<<<<<Pendle functions contract ABI calls>>>>> - see docs (if the AMM is not worth it, maybe better to do it by yourself directly working with Compound or 
-    // Aave tokens and tokenized future yields)
-    /*
+    function splitCPsFundsForDelegatees(RequestFoContent ) internal resturns() {
+        //TO DO for next iteration
+    };
+
+
+    //JUST USE COMPOUND for 1st iteration, and keep something like Pendle for later iterations
+    
+    // >>ALSO left for future developments:<<
+    //Write functions for the Delegation proof-of-satke mechanism,
+    //  to have several CPs coordinating on different aspect of the RfC
+
+
+    /* 
+        >>TBD in next iteration<<
+
+    >>>> PENDLE MAIN USE CASE: being able to secure a fixed-rate yield, and possibly top it off with a variable bonus at expiration date of the YToken?
+    <<<<<<Pendle functions contract ABI calls>>>>> 
+    
+    - see docs (if the AMM is not worth it, maybe better to do it by yourself directly working with Compound or 
+     Aave tokens and tokenized future yields)
+    
         SUPER IMPORTANT TO CONTINUE THAT ROAD, their contracts address on the Kovan testnet: 
         https://docs.pendle.finance/docs/addresses/kovan
 
@@ -273,7 +356,7 @@ contract FundsManager {
         to have these protocols set up in your test environment during development. Hence, to avoid having to deploy 
         these protocols from scratch, and to best simulate mainnet conditions, we recommend using Hardhat's mainnet forking feature."
 
-    */
+    
 
     //https://docs.pendle.finance/docs/guides/tokenizing-yield-tokens:
 
@@ -344,7 +427,7 @@ contract FundsManager {
         );
     }
 
-    //I choose to ignore for the sake opf simplicity the case of an expired YT contract
+    //I choose to ignore for the sake of simplicity the case of an expired YT contract
 
     //After the yield contract has expired or reached the maturity date, instead of redeeming back the underlying yield-bearing asset, 
     // we can renew the yield contract to a new expiry date. Underneath it all, the function is basically just a proxy call to redeemAfterExpiry() 
@@ -372,7 +455,7 @@ contract FundsManager {
         );
     }
 
-    /*
+    
     https://docs.pendle.finance/docs/guides/performing-a-swap
 
     Executing the Swap - Examples​
@@ -386,9 +469,9 @@ contract FundsManager {
     Lastly, remember that because our contract is a contract itself and not an extension of the caller (which is you), 
     you must also make sure to provide token allowance to the PendleRouter.
 
-    */
+    
 
-    /* IDEA:
+     IDEA:
     Create YT markets for each services you think might be interesting for content creation to distribution: Filecoin, Arweave, LivePeer, Audius, etc.
     Then add the logic here that enables to:
         1. Tokenize Yield Tokens 
@@ -397,10 +480,9 @@ contract FundsManager {
             => most liekly don't have a yield-bearing tokens on Aave or Compound - still worth verifying)
 
         Then, it would lead to different set-up to play with.
-    */  
 
 
-    
+    */
 
 
 
