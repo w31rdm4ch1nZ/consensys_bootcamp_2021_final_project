@@ -188,10 +188,28 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155Pausable.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155Burnable.sol";
 
-//the upgradable pattern is chosen in the event of a real dapp evolution, as I would like a beta to be available to the public, 
+//**the upgradable pattern** is chosen in the event of a real dapp evolution, as I would like a beta to be available to the public, 
 // but also that they keep their access to the contents and the shares on those contents produced in the beta phase, w/o a cumbersome 
 // upgrade and migration at their gas cost, and implying operations from those users that might be challenging for some. 
 
+
+//FOR THE FINAL PROJECT SCOPE: LIMIT the RfC to an NFT related content request (still, try using several components 
+// from which are automaticallyinferred requirements to be relized with the delivery of the content)
+    // >>It will help splitting the RfC in a way that enables to validate and distribute the reward to the CP(s) in 
+    //      a relatively straightforward way/simple calculation, based on the component delivered. For instance: 
+    //          - if not an NFT, then $0 reward to the CP + yield go all to the investors; 
+    //          - if NFT, but not for every investors, then returns payment + their yield % + yield of CPs on equal 
+    //          proportion than what investors had piad + slash a fee from the CP(s) commited stablecoin (like 1-20%, 
+    //          depending on the proportion of investors / total investors;
+    //          - if NFT, but not stored through a decentralized protocol => part of payment that would have gone to the protocol (Filecoin) +
+    //          part of their ownership on content and future access to the content is distributed to the investors (let say initially 8%, then
+    //          4% goes to the investors  and CP only keeps 4% on all future gains on this content)
+    //          - if NFT, and all, but incompatible with Opensea (part of the initial RfC), then value of the content can't be considered the same.
+    //          Investors have the right to redeem content (NFT) for their payment for one month
+    //          - ...
+    //          MOST OF IT IS AT THHIS POINT DEFINED IN A RATHER ARBITRARY FASHION, BUT WOULD BE MUCH CAREFULLY THOUGHT THROUGH (and more subtlety encoded
+    //          in the smart contract logic) IF IT WERE TO BE PUSHED ON A MAINNET.
+    
 contract RequestForContentToken is ERC1155, Initializable, ERC1155Upgradeable, OwnableUpgradeable, ERC1155SupplyUpgradeable, UUPSUpgradeable {          // The contract can call standard functions from the ERC-1155 (as I understand it so far)
     //Each type of content is linked to one or several protocols (Filecoin, Audius, LivePeer, etc.), each linked 
     //to a certain collateral that will allow the payment of the fees to become the medium of the content 

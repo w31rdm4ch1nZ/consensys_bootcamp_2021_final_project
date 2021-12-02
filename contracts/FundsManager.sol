@@ -38,7 +38,8 @@ EMBEDS THE CONTENT DELIVERY PROTOCOL CORE LOGIC IN A CLEAN (NON REDUNDANT, ..?) 
 
 7. *[maybe for another iteration as it introduces new pbs/challenges linked to voting mechanisms and threat vectors for CPs against competing CPs, etc.]*
     In case of completion ("yes/true"), once the last round of distribution happened, the remaining CPs funds are to be 
-    subject to a last round of satisfaction (vote signaling) by the user-investors 
+    subject to a last round of satisfaction (vote signaling) by the user-investors, on which the good-behaving 
+    a reliant CPs can build a brand/trustworthiness
 
 
 */
