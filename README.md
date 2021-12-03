@@ -1,6 +1,7 @@
 # My Consensys 2021 Bootcamp Final Project
 
-[I'll clean this whole part, filled with some irrelevant notes and wayyyy too verbose :0]
+[I have opted for an extension. I'll be working on it as long as I can, but will 1st focus on the 1st iteration to submit as my Final Project.
+I'll clean/simplify/shorten the whole repo before submitting it as a Final Project - I know it is filled with some irrelevant notes and wayyyy too verbose :-o]
 
 After several iteration over my inital idea (and definitely spending too much time on ideation),
 I came to freeze it for now - hardly... 
