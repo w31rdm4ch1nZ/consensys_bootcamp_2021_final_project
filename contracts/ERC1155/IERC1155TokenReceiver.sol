@@ -1,6 +1,6 @@
-pragma solidity ^0.5.0;
+pragma solidity >=0.4.22 <0.9.0;
 
-import "openzeppelin-solidity/contracts/introspection/IERC165.sol";
+import "@openzeppelin/contracts/introspection/IERC165.sol";
 
 /**
     @title ERC-1155 Multi Token Receiver Interface

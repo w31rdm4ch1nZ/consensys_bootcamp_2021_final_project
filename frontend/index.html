@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Content Market Protocol</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 </head>
 <body>
     <h1>A platform disintermediating the media industries!</h1>
@@ -16,14 +18,26 @@
     <p>Participating as an investor</p>
 
     <p>Participating as a creator, or more generally speaking, a content provider</p>
+    <div id="mm-detected"></div>
 
-    <button class="enableEthereumButton">Enable Ethereum</button>
+    <!-- Connect to MetaMask Wallet -->
+
+    <button id="mm-connect">Connect to MetaMask</button>
+
+    <!-- Display current address -->
+
+    <div id="mm-current-account"></div>
+      <!-- Provide an input to change the contract text value -->
+    <div>
+        <input id="ss-input-box" type="number" placeholder="Provide input"/>  
+    </div>
+    <button id="ss-input-button">Submit Value</button>
+
+    <button class="sendEthButton btn">Send Eth</button>
     
 </body>
 
-<script >
-
-</script>
+<script src="connect_to_my_dapp.js"></script>
 
 </br></br></br>
 

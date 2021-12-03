@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
-
+pragma solidity >=0.4.22 <0.9.0;
 /*
 
 [[[IMPORTANT NOT TO FORGET THOSE NOTES AND ELEMENTS TAKEN FROM GNOSIS CONDITIONAL TOKEN >>>> READ IT AGAIN FOR THE FINAL SCAFFOLDING STEP]]]
@@ -176,8 +176,7 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155Pausable.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155Burnable.sol";
 */
 
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.2;
+
 
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";

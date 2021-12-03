@@ -187,3 +187,10 @@ The "How?" can in some circumstances be put to a DAO-like vote, there can be par
 - [`LICENSE`](LICENSE) (GPL-3.0-only): see COPYING file.
   
 [GPL-3.0-only] Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+
+
+## Preparing the final readme
+
+So the openZeppelin Library of contracts can be used, do:
+
+npm install @openzeppelin/contracts

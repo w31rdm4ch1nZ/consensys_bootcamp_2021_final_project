@@ -1,3 +1,5 @@
+pragma solidity >=0.4.22 <0.9.0;
+
 //Define the roles and authorizations (mostly through modifiers - so maybe an abstract contract inherited 
 // by the ones needing this RBAC definition) of:
 //  - the users (anyone => 0 other trust mechanisms than the one you'll implement in this smart contract)

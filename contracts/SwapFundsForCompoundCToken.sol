@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
-
+pragma solidity >=0.4.22 <0.9.0;
 /*
 
 Likely to be integrated in the FundsManagement contract (maybe kept spearate for better modularity, upgradability and readability)?

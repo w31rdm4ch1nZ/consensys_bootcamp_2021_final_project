@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
-
+pragma solidity >=0.4.22 <0.9.0;
  
 /* 
 
@@ -44,8 +44,6 @@ EMBEDS THE CONTENT DELIVERY PROTOCOL CORE LOGIC IN A CLEAN (NON REDUNDANT, ..?) 
 
 */
 
-// See for the compiler you should use
-pragma solidity ^0.8.2;
 //the abicoder-v2, to allow for arbitrary nested arrays and structs to be encoded and decoded in calldata. => to research.
 pragma abicoder v2;
 
