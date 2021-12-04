@@ -1,4 +1,5 @@
-pragma solidity >=0.4.22 <0.9.0;
+// SPDX-License-Identifier: GPL-3.0-only
+pragma solidity ^0.8.0;
 
 //Define the roles and authorizations (mostly through modifiers - so maybe an abstract contract inherited 
 // by the ones needing this RBAC definition) of:

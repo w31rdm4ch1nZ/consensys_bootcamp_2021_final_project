@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
-pragma solidity >=0.4.22 <0.9.0;
-/*
+pragma solidity ^0.8.0;/*
 
     >>>>Waiting for a full DAO tooling, the most simplistic vote implementation you can think of so it can
     work for the few rounds it is required.<<<<

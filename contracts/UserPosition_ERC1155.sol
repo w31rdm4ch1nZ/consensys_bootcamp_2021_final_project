@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 
 
 //shares (+RfCId) in a specific RfC => mint an ERC721
