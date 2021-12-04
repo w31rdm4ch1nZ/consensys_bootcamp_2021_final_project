@@ -30,7 +30,7 @@ EMBEDS THE CONTENT DELIVERY PROTOCOL CORE LOGIC IN A CLEAN (NON REDUNDANT, ..?) 
     Receive what Pendle returns under a tokenized form yet to be defined - by going through their doc and testing what you
     can do with their ABI.
 
-5. - Tokens distribution Logic for User-investore in case of failing to deliver on the CPs side
+5. - Tokens distribution Logic for User-investors in case of failing to deliver on the CPs side
    - Symmetric Logic applying to the CPs commited = slashing a ratio of what they have commited.
 
 6. - Token distribution Logic for the CPs when the outcome is "yes/true", that is the content was delivered.
@@ -112,16 +112,18 @@ contract FundsManager {
     }
 
     //EVENTS
-    event WalletFundsApproved();
+    //event WalletFundsApproved();
     
     event FundsReceived(address account);
 
-    event investorsFundsPooled();
-    event CPsFundsPoooled();
+    //event investorsFundsPooled();
+    
+    //event CPsFundsPoooled();
 
-    event FundsSwappedToStablecoin();
+    //event FundsSwappedToStablecoin();
 
     /*
+    ONCE ADDED USE of Pendle (next iteration)
     event YieldTokenized();
 
     event PendleCalledSuccess(uint256 numberOfYT, uint256 YTvalueAtTimeOfDeposit, ...);
@@ -129,13 +131,14 @@ contract FundsManager {
 
     //constructor
 
-    
+    /*
     //fallback and ..? functions
     //Not sure I'll keep this function - should handle every tx sending ethers more gracefully
     function () external payable {
         revert();
     }
-    
+    */
+
     //>>>>Same, not sure I keep this direct call from any user on this contract...<<<<
     /// @notice a user can read the value of funds held by the contract (before they are put in the "management cycle")
     /// @return The balance of the user
@@ -177,7 +180,7 @@ contract FundsManager {
     //  and gas price to happen ) once an RfC is tokenized/minted (adding a modifier RfCTokenMinted()):
         // The question of a protocol native stablecoin is still TBD in the next developments, as it has its rationale, but adds too much complexity rn
     function swapToStablecoin(
-        string _tickerStablecoin, 
+        string _tickerStablecoin,       //only FEI or USDC for now
         uint _amount, 
         uint _pooledFundsId/* not sure how to implement the pool yet*/
         ) 
@@ -186,6 +189,15 @@ contract FundsManager {
             //TO DO
 
             //call to Uniswap contract? Check if there is a way to do it all in Compound
+            if (msg.value > 0) {
+                convertEthToExactFEI(paymentAmountInDai);
+            } else {
+                require(feiToken.transferFrom(msg.sender, address(this), swapEthAmountInFEI));
+            }
+
+            //pool the FEI/DAI for one specific RfC once this RfC has been accepted, then deposit in Compound:
+
+            //for local tests - just a simple quotation based on a fixed ether price and only ETH -> FEI
 
             //event emitted on successful swap
             emit StablecoinswapSuccess();
@@ -194,9 +206,118 @@ contract FundsManager {
 
             //return this value and the address to 
         }
+    
+    //function using Uniswapv3 to swap Eth payment (by investors and CPs) to DAI or FEI (I'd like FEI if Compound takes it):
+    // code taken from (https://soliditydeveloper.com/uniswap3)
+    function convertEthToExactDai(uint256 daiAmount) external payable {
+        require(daiAmount > 0, "Must pass non 0 DAI amount");
+        require(msg.value > 0, "Must pass non 0 ETH amount");
+        
+        uint256 deadline = block.timestamp + 15; // using 'now' for convenience, for mainnet pass deadline from frontend!
+        address tokenIn = WETH9;
+        address tokenOut = multiDaiKovan;        // check for a public testnet easy to use (can have Eth easily) and have an instance of Uniswap and Compound
+        uint24 fee = 3000;
+        address recipient = msg.sender;
+        uint256 amountOut = daiAmount;
+        uint256 amountInMaximum = msg.value;
+        uint160 sqrtPriceLimitX96 = 0;          // Can be used to determine limits on the pool prices which cannot  be exceeded by the swap. If you set it to 0, it's ignored.
+        
+        // The SwapRouter will be a wrapper contract provided by Uniswap that has several safety mechanisms and convenience functions. 
+        //  You can instantiate it using ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564) for any main or testnet.
+        ISwapRouter.ExactOutputSingleParams memory params = ISwapRouter.ExactOutputSingleParams(    // should require inporting Uniswap ISwapRouter contract
+            tokenIn,
+            tokenOut,
+            fee,
+            recipient,
+            deadline,
+            amountOut,
+            amountInMaximum,
+            sqrtPriceLimitX96
+        );
+        
+        uniswapRouter.exactOutputSingle{ value: msg.value }(params);
+        uniswapRouter.refundETH();
+        
+        // refund leftover ETH to user
+        (bool success,) = msg.sender.call{ value: address(this).balance }("");
+        require(success, "refund failed");
+    }
+
+    //function used by the frontend to give users the exact amount of Ether needed for a given amount in DAI/FEI:
+    function getEstimatedETHforDAI(uint daiAmount) external payable returns (uint256) {
+        address tokenIn = WETH9;
+        address tokenOut = multiDaiKovan;
+        uint24 fee = 500;
+        uint160 sqrtPriceLimitX96 = 0;
+
+        return quoter.quoteExactOutputSingle(
+            tokenIn,
+            tokenOut,
+            fee,
+            daiAmount,
+            sqrtPriceLimitX96
+        );
+    }
+    /** 
+        >>>>>PREVIOUSLY THOUGHT TO BE PART OF A SEPARATE CONTRACT (named SwapFundsForCompoundCToken), now integrated - see below<<<<<
+
+    This step is the fundamental previous step to use Pendle contracts.
+
+    + It might be an occasion to use the Compound.js wrappers presented in during the bootcamp.
+
+            ==> output: the user-investors and CPs funds put under escrow are send to Compound protocol, then it returns the cTokens for each position.
+                    ==> you have to determine once and for all if it works individually or collectively. What I think would work best:
+                        ==> Figure out how to use ERC-1155 to get 2 cTokens (save gas and management seems more easy - but you can change of idea
+                        later on in the actual implementation of course), 1 for user-investors pooled funds (but have a mechanism to get back yield for individuals
+                        once they can exit so they don't lose it) and 1 PER CP (as the RfC to be split for cooperation or delegation of some tasks)
+                        ==> Also define how (/why it is used and what does it enable them protocol to do) it (yields on funds used as collateral) works to benefit the 
+                        active participants, the protocol itself, and the future access to the content for the user-investors, some protocol's incentivization specifically
+                        towards CPs (through sending some of protocol's revenue on all transactions to those CPs), also some part is sent according to the overall shares
+                        of ownership on contents produced through the platform.
+
+
+
+    // Tests to be done with the Rinkeby Testnet contracts addresses of Comppound and Pendle (check for compatibility of testnets of both Pendle and Compound - 
+    // should be fine as Pendle is built on top of money markets as Compound and Aave)
+
+
+    //This contract could be an interface designed for our FundsManager contract to interact with Compound (interesting pattern thinking here
+    // it might indeed be easier to maintain as Compound and our Dapp core contract evolves (upgrades management)?).
+
+    //It also could handle the swap of a crypto-currency such as Ether for a stablecoin such as DAI or FEI. 
+
+    **/
+
+
 
     //3. Call to compound contract to deposit stablecoin and earn on it - which returns cTokens, kept under escrow by this contract 
     //  Take a closer look at the Compound.js wrappers to see if you can do it in the most simple way.
+    //      => https://github.com/compound-finance/compound-js
+    //          => See in particular: https://compound.finance/docs/compound-js#cToken
+    // OR use the Compound (lower-level) API: https://compound.finance/docs/api
+    // Also see the Consensys demo github repo: https://github.com/ajb413/consensys-academy-compound-js
+    const main = async () => {
+    const account = await Compound.api.account({
+        "addresses": "0xB61C5971d9c0472befceFfbE662555B78284c307",
+        "network": "ropsten"
+    });
+
+    let daiBorrowBalance = 0;
+    if (Object.isExtensible(account) && account.accounts) {
+        account.accounts.forEach((acc) => {
+        acc.tokens.forEach((tok) => {
+            if (tok.symbol === Compound.cDAI) {
+            daiBorrowBalance = +tok.borrow_balance_underlying.value;
+            }
+        });
+        });
+    }
+
+    console.log('daiBorrowBalance', daiBorrowBalance);
+    }
+
+    main().catch(console.error);
+
 
     //4. Call to/from RfC contract to makes those pooled cTokens part of the RfC token (maybe using the ownable token interface in proposition state)
     
@@ -328,11 +449,11 @@ contract FundsManager {
     };
 
 
-    //JUST USE COMPOUND for 1st iteration, and keep something like Pendle for later iterations
+    //>>>>>>>>>>>>>>>>>JUST USE COMPOUND for 1st iteration, and keep something like Pendle for later iterations<<<<<<<<<<<<<<<<
     
     // >>ALSO left for future developments:<<
-    //Write functions for the Delegation proof-of-satke mechanism,
-    //  to have several CPs coordinating on different aspect of the RfC
+    //>>>>Write functions for the Delegation proof-of-stake mechanism and split RfC also used for that purpose, 
+    // to have several CPs coordinating on different aspect of the RfC
 
 
     /* 
