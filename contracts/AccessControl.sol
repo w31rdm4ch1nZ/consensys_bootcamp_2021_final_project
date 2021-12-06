@@ -49,4 +49,6 @@ contract UserRoles {
 
     //mapping (addr => UserType);
 
+    //ADD part to handle FundsManager only access to functions handling interactions with other protocols (Uniswap and Compound for now)
+
 }

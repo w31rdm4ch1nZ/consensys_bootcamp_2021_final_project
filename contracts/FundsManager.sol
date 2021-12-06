@@ -10,7 +10,7 @@ contract FundsManager {
     //set of amount states value necessary for our various use cases that will be used as input to mint our RfC 1155 tokens
     // (ex: minting an NFT and somr ERC-20 and sending both to a user for an art project that wants to give back to the investors
     // through the artwork + some of the benefits made during the drop, or after; ):
-    
+    address public immutable contractAddr = address(this);  // used mainly to txs initiated by this contract (with the Uniswap and Compound ones, and any PCV-like mechanics)
     address public immutable testnetWETH = "";   //hardcoding for now the eth erc20 wrapper contract adress on the testnet used
 
     address public account;
@@ -51,12 +51,8 @@ contract FundsManager {
     //instantiation of the RfC contract to use it in relation to the fund management logic (rewards payment, splitted RfC payment calculation
     // and distribution, backing RfC with ERC20, etc.)
     RequestForContent public RfC;           // maybe call throuhgh an interface (making it easier to upgrade and callable by other contracts: 
-                                            // IRequestForContent public immutable RfC)
+                                            // IRequestForContent public immutable RfC)        DM me for details
 
-    //maybe defined in an interface for RfC tokens:
-    //uint RfCId;
-
-    //MODIFIERS
 
     // Those three will enable a control over the feature accessed by our different type of users, both for use and security reasons:
     modifier isInvestor{
@@ -123,7 +119,13 @@ contract FundsManager {
 
     //1. sent funds contract receiving function (the 'commit event' in cases of investors and CPs):
 
-    //Think how to write this logic in a more readable way:
+    //Think how to write this logic in a more readable way - think as the user => so write a function for the different types of txs a user could do (among ur diff types of users):
+
+    //tx for user to become investor on a specific content request (pb: avoiding that only one user would be the investor in one RfC). 
+    // I think it leads to use several steps instead of one (deposit money):
+        //
+    function 
+
     function receiveFunds(address _from, uint _amount) public payable {
         //1st function to handle every deposit = before any user's classification, or any swap or tapping in any yield protocol.
         // Simple purpose: receive safely any deposit, and having it ready to be usable (pulled by other more advanced functions)

@@ -39,7 +39,7 @@ contract Vote {
 // function in this contract on the FundsManager contract, etc. )
 
 //check this contract for outdated coding patterns (like will you use "throw here"?)
-pragma solidity ^0.8.0;
+
 
 /// @title Voting with delegation and with weight possibly modified under certain conditions (through parameters taken from other contracts like FundsManager for the staked/commited/under escrow funds).
 contract VoteAndDelegateCoordinationMechanisms {
