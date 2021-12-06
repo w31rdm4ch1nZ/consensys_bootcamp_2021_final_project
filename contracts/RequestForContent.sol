@@ -14,24 +14,14 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155Burnable.sol";
 // but also that they keep their access to the contents and the shares on those contents produced in the beta phase, w/o a cumbersome 
 // upgrade and migration at their gas cost, and implying operations from those users that might be challenging for some. 
 
+// Once validated (cf. conditions for an RfC to be validated - already defind in your notes):
+// Mint an ERC155 allowing to keep track of those multiple tokens multiple positions:
+//  - Mint an NFT of the RfC
+//  - At the same time, mint the ERC20s / pooled funds associated to the RfC (and redeemable by the different participants in
+//      different ways)
+//  - Splitted RfC if it happens
+//  - ...
 
-//FOR THE FINAL PROJECT SCOPE: LIMIT the RfC to an NFT related content request (still, try using several components 
-// from which are automaticallyinferred requirements to be relized with the delivery of the content)
-    // >>It will help splitting the RfC in a way that enables to validate and distribute the reward to the CP(s) in 
-    //      a relatively straightforward way/simple calculation, based on the component delivered. For instance: 
-    //          - if not an NFT, then $0 reward to the CP + yield go all to the investors; 
-    //          - if NFT, but not for every investors, then returns payment + their yield % + yield of CPs on equal 
-    //          proportion than what investors had piad + slash a fee from the CP(s) commited stablecoin (like 1-20%, 
-    //          depending on the proportion of investors / total investors;
-    //          - if NFT, but not stored through a decentralized protocol => part of payment that would have gone to the protocol (Filecoin) +
-    //          part of their ownership on content and future access to the content is distributed to the investors (let say initially 8%, then
-    //          4% goes to the investors  and CP only keeps 4% on all future gains on this content)
-    //          - if NFT, and all, but incompatible with Opensea (part of the initial RfC), then value of the content can't be considered the same.
-    //          Investors have the right to redeem content (NFT) for their payment for one month
-    //          - ...
-    //          MOST OF IT IS AT THHIS POINT DEFINED IN A RATHER ARBITRARY FASHION, BUT WOULD BE MUCH CAREFULLY THOUGHT THROUGH (and more subtlety encoded
-    //          in the smart contract logic) IF IT WERE TO BE PUSHED ON A MAINNET.
-    
 contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*OwnableUpgradeable,*/ ERC1155SupplyUpgradeable, UUPSUpgradeable {          
 
     //Each type of content is linked to one or several protocols (Filecoin, Audius, LivePeer, etc.), each linked 
@@ -72,33 +62,6 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         _setupRole(UPGRADER_ROLE, msg.sender);
         _setupRole(FUNDSMANAGER_ROLE, msg.sender);
     }
-
-
-
-
-    function setURI(string memory newuri) public onlyOwner {
-        _setURI(newuri);
-    }
-
-    function mint(address account, uint256 id, uint256 amount, bytes memory data)
-        public
-        onlyOwner
-    {
-        _mint(account, id, amount, data);
-    }
-
-    function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
-        public
-        onlyOwner
-    {
-        _mintBatch(to, ids, amounts, data);
-    }
-
-    function _authorizeUpgrade(address newImplementation)
-        internal
-        onlyOwner
-        override
-    {}
 
     // The following functions are overrides required by Solidity.
 
@@ -162,7 +125,7 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
     }
 
 
-    //Request for Content tokenization definition - check the way Gnosis tokenizes its "rich-logic/data tokens":
+    //>>>>>>Request for Content tokenization definition - check the way Gnosis tokenizes its "rich-logic/data tokens":<<<<<<<<\\
 
 
     //mandatory
@@ -172,10 +135,12 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         Video,
         Audio,
         Article,
-        Software
+        Software,
         undefined               // => just used to disqualified a proposal before it reaches the proposal round (there will be also a grey/uncliclable 
                                 // are as long as the proposal don't include this mandatory field)
     }
+        // => result which could be passed in a tx from the frontend would be a value that triggers a certain call among the ERC1155 functions:
+        //  _mint() / etc.
 
     //optional
     enum subContentTypeFileFormats {
@@ -200,6 +165,7 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         dockerizedImage,
         undefined
     }
+        // => result: add a component (that can be split later if necessary) to the RfC tokenized set of requirements
 
     //optional
     enum PlatformIntegrationAtDelivery {

@@ -275,16 +275,24 @@ contract FundsManager {
 
     };
 
-
-    //5.1  if RfC delivered successfully,
-
-    //5.1.1 mint content NFT or access to content NFT for the investors + shares on content earned by the investors (tracked through same mechanism as 
+    //5. mint content NFT or access to content NFT for the investors + shares on content earned by the investors (tracked through same mechanism as 
     //  Uniswap LPs share NFT mechanism) granted because of their contribution
 
     //  (a second function - might also encoded in the same function - regards
     //  providing acces to any users => likely separately so you implement the flow for a user to access content (simple payment, access token (NFT)
     //  and distribution of the payment between investors shares on this content, CP(s) involved in the content production, and fees for the actual
-    //  platform(s) hosting the content (filecoin/IPFS, LivePeer, etc.)))  
+    //  platform(s) hosting the content (filecoin/IPFS, LivePeer, etc.))) 
+
+    //5.1  if content delivered successfully:
+
+    // 5.1 PooledFunds under cToken contract are swapped for Eth: cDAI -> DAI -> ETH swap before withdraw
+    
+    // Once contract gets Eth back, withdraw and payments functions
+    function withdrawInvestors() external {
+
+    }
+
+     
 
     //5.1.2. CPs payment once content minted and accessed by investors + get some of the yield gained through cTokens with which they can 
     //  tune up a bit their business model (perks for investors, perks for future users accessing the content, etc. => a limited /contrained and 
@@ -300,9 +308,9 @@ contract FundsManager {
 
     };
 
-    // 5.2 The RfC is not delivered or accepted:
+    // 5.2 If the RfC is not delivered or accepted:
 
-    // 5.2.1 Redeem investors funds
+    
 
     // 5.2.2 Slash a part of the CPs capital commited to this contract
 
