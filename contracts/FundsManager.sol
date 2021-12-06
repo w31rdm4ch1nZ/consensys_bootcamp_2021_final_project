@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity ^0.8.0;
 
 //the abicoder-v2, to allow for arbitrary nested arrays and structs to be encoded and decoded in calldata. => to research.
@@ -202,66 +202,17 @@ contract FundsManager {
             sqrtPriceLimitX96
         );
     }
-    /** 
-        >>>>>PREVIOUSLY THOUGHT TO BE PART OF A SEPARATE CONTRACT (named SwapFundsForCompoundCToken), now integrated - see below<<<<<
-
-    This step is the fundamental previous step to use Pendle contracts.
-
-    + It might be an occasion to use the Compound.js wrappers presented in during the bootcamp.
-
-            ==> output: the user-investors and CPs funds put under escrow are send to Compound protocol, then it returns the cTokens for each position.
-                    ==> you have to determine once and for all if it works individually or collectively. What I think would work best:
-                        ==> Figure out how to use ERC-1155 to get 2 cTokens (save gas and management seems more easy - but you can change of idea
-                        later on in the actual implementation of course), 1 for user-investors pooled funds (but have a mechanism to get back yield for individuals
-                        once they can exit so they don't lose it) and 1 PER CP (as the RfC to be split for cooperation or delegation of some tasks)
-                        ==> Also define how (/why it is used and what does it enable them protocol to do) it (yields on funds used as collateral) works to benefit the 
-                        active participants, the protocol itself, and the future access to the content for the user-investors, some protocol's incentivization specifically
-                        towards CPs (through sending some of protocol's revenue on all transactions to those CPs), also some part is sent according to the overall shares
-                        of ownership on contents produced through the platform.
 
 
 
-    // Tests to be done with the Rinkeby/Topsten Testnet contracts addresses of Comppound and Pendle (check for compatibility of testnets of both Pendle and Compound - 
-    // should be fine as Pendle is built on top of money markets as Compound and Aave)
 
-
-    //This contract could be an interface designed for our FundsManager contract to interact with Compound (interesting pattern thinking here
-    // it might indeed be easier to maintain as Compound and our Dapp core contract evolves (upgrades management)?).
-
-    //It also could handle the swap of a crypto-currency such as Ether for a stablecoin such as DAI or FEI. 
-
-    **/
-
-
-    /*
     //3. Call to compound contract to deposit stablecoin and earn on it - which returns cTokens, kept under escrow by this contract 
     //  Take a closer look at the Compound.js wrappers to see if you can do it in the most simple way.
     //      => https://github.com/compound-finance/compound-js
     //          => See in particular: https://compound.finance/docs/compound-js#cToken
     // OR use the Compound (lower-level) API: https://compound.finance/docs/api
     // Also see the Consensys demo github repo: https://github.com/ajb413/consensys-academy-compound-js
-    const main = async () => {
-    const account = await Compound.api.account({
-        "addresses": "0xB61C5971d9c0472befceFfbE662555B78284c307",
-        "network": "ropsten"
-    });
 
-    let daiBorrowBalance = 0;
-    if (Object.isExtensible(account) && account.accounts) {
-        account.accounts.forEach((acc) => {
-        acc.tokens.forEach((tok) => {
-            if (tok.symbol === Compound.cDAI) {
-            daiBorrowBalance = +tok.borrow_balance_underlying.value;
-            }
-        });
-        });
-    }
-
-    console.log('daiBorrowBalance', daiBorrowBalance);
-    }
-
-    main().catch(console.error);
-    */
 
     //4. Call to/from RfC contract to makes those pooled cTokens part of the RfC token (maybe using the ownable token interface in proposition state)
     
@@ -319,7 +270,10 @@ contract FundsManager {
 
     /*
         >>>>>
-            LAST IMPORTANT PIECE OF YOUR 1ST ITERATION:
+            LAST IMPORTANT PIECE OF YOUR 1ST ITERATION -- NOW thought to be implemented after 1st iteration 
+            (cf. FEI Protocol implementation, particularly relative complexity brought with
+            the execution control/contracts calls management necessary for the PCV to act through a 
+            authorization for a main contract acting as the PCV through modifiers):
             THE "PROTOCOL CONTROLLED VALUE" (PCV), OR THE VALUE ACCRUED
             BY THE PROTOCOL OVER TIME THROUGH A RATIO TAKEN ON SOME TRANSACTIONS
             (BE VERY CAREFUL AT HOW THAT MIGHT IMPACT THE INCENTIVE OF THE
