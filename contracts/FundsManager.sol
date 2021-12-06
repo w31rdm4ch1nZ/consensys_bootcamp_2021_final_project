@@ -152,6 +152,8 @@ contract FundsManager {
     } 
 
     //POOLING FUNDS HAS TO BE DONE FOR EACH AND EVERY RfC (so the logic apply sperately and the different outcomes can be processed independently)
+    //  => ideally, no. You'll have a dynamic NFT that tracks those different positions across several RfC, and allows for higher and more gas efficient
+    //  compounded interest rate
     function poolingFunds(RfC _RfCId) internal returns() {};
 
     //2. swap (all) pooled funds for stablecoin, that has to be supported by Compound atm (for investors and CPs use case - except all cases where instant payment can take place, so no need for swap 
