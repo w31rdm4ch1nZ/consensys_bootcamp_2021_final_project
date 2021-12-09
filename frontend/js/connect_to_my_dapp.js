@@ -15,6 +15,7 @@ const ssABI =
 
 
 // window.ethereum
+web3 = new Web3(window.ethereum)
 const accounts = ethereum.request({ method: 'eth_accounts' });
 
 //const ethereumButton = document.querySelector('.enableEthereumButton');

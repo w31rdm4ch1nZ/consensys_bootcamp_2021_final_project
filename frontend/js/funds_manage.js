@@ -1,3 +1,6 @@
+var Web3 = require('web3');
+var web3 = new Web3(Web3.givenProvider || "https://ropsten.infura.io/v3/" + INFURA_ID);
+
 //see for integration in the homepage, accessble to all users - maybe put it in the main js script
 const requiredEth = (await myContract.getEstimatedETHforDAI(daiAmount).call())[0];
 const sendEth = requiredEth * 1.1;      // to force to send slightly more than the estimate to limit reverted txs

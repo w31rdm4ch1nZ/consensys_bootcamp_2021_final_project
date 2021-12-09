@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+
 //MAYBE NO UPSIDE TO PROCESS SEPARATELY CPs AND  INVESTORs FUNDS => same cDAI for all committed participants, but issuance of bond-like tokens that allows
 // to further differentiate uses. 
 
@@ -10,12 +12,15 @@ contract FundsManager {
     //set of amount states value necessary for our various use cases that will be used as input to mint our RfC 1155 tokens
     // (ex: minting an NFT and somr ERC-20 and sending both to a user for an art project that wants to give back to the investors
     // through the artwork + some of the benefits made during the drop, or after; ):
+    
+    using SafeERC20 for IERC20;
+
     address public immutable contractAddr = address(this);  // used mainly to txs initiated by this contract (with the Uniswap and Compound ones, and any PCV-like mechanics)
-    address public immutable testnetWETH = "";   //hardcoding for now the eth erc20 wrapper contract adress on the testnet used
+    //address public immutable testnetWETH = "";   //hardcoding for now the eth erc20 wrapper contract adress on the testnet used
 
     address public account;
 
-    mapping (address => uint256) balances;
+    mapping (address => uint256) balance;
 
     //1st, simple, deposit to the contract (also an event):
     //to "get" the addresses of users with deposits in the contract. Used also to have a list of users addr using the protocol:
@@ -86,7 +91,19 @@ contract FundsManager {
 
 
     //constructor definition:
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() initializer {}
 
+    constructor() initializer public {
+        
+        //Obviously the goal is to set up different multi-sig accounts for each role - that is just to consider as a scaffolding or example: 
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(URI_SETTER_ROLE, msg.sender);
+        _setupRole(PAUSER_ROLE, msg.sender);
+        _setupRole(MINTER_ROLE, msg.sender);
+        _setupRole(UPGRADER_ROLE, msg.sender);
+        _setupRole(FUNDSMANAGER_ROLE, msg.sender);
+    }
 
     /*
     //fallback and ..? functions
@@ -152,6 +169,38 @@ contract FundsManager {
         */
 
     } 
+
+    /// @notice withdraw ERC20 from the contract
+    /// @param token address of the ERC20 to send
+    /// @param to address destination of the ERC20
+    /// @param amount quantity of ERC20 to send
+    function withdrawERC20(
+      address token, 
+      address to, 
+      uint256 amount
+    ) public virtual override onlyFundsManagerController {
+        _withdrawERC20(token, to, amount);
+    }
+
+    function _withdrawERC20(
+      address token, 
+      address to, 
+      uint256 amount
+    ) internal {
+        IERC20(token).safeTransfer(to, amount);
+        emit WithdrawERC20(msg.sender, token, to, amount);
+    }
+
+    /// @notice withdraw ETH from the contract
+    /// @param to address to send ETH
+    /// @param amountOut amount of ETH to send
+    function withdrawETH(address payable to, uint256 amountOut) external virtual override onlyFundsManagerController {
+        Address.sendValue(to, amountOut);
+        emit WithdrawETH(msg.sender, to, amountOut);
+    }
+
+    function balance() public view virtual override returns(uint256);
+
 
     //POOLING FUNDS HAS TO BE DONE FOR EACH AND EVERY RfC (so the logic apply sperately and the different outcomes can be processed independently)
     //  => ideally, no. You'll have a dynamic NFT that tracks those different positions across several RfC, and allows for higher and more gas efficient

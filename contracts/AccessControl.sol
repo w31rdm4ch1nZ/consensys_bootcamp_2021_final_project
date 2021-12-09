@@ -30,7 +30,7 @@ contract UserRoles {
 
     // It does not replace a multi-sig account for all or most of these roles
 
-// SPDX-License-Identifier: GPL-3.0-only
+
 
     // user types for the ERC1155 token management (take into account they might be both at the same time)
 

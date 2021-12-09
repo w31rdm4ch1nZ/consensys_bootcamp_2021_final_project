@@ -6,6 +6,8 @@ var SwapForCToken = artifacts.require("./SwapFundsForCompoundCToken");
 
 //>>>>> Add the Compound and Pendle Rinkeby contract addresses <<<<<
 
+
+
 if (typeof window.ethereum !== 'undefined') {
     console.log('MetaMask is installed!');
 }
@@ -45,7 +47,7 @@ contract("FundsManager", function (accounts) {
              
             //>> is the value of the funds commited by the user to an RfC readable? => right visibility, get() public
             //>> does the user have several RfC she's engaged in?
-            //>> When the funds for each RfC were 1st commited?
+            //>> When the funds for each RfC were 1st committed?
             //>> How much at the time?
             //>> How much now?
             //>> How much projected based on the Content Delivery expiration/deadline delivery? 

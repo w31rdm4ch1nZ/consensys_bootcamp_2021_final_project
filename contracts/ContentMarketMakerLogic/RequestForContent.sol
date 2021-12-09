@@ -55,6 +55,7 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         __ERC1155Supply_init();
         __UUPSUpgradeable_init();
 
+        //Obviously the goal is to set up different multi-sig accounts for each role - that is just to consider as a scaffolding or example: 
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(URI_SETTER_ROLE, msg.sender);
         _setupRole(PAUSER_ROLE, msg.sender);
@@ -258,6 +259,10 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
     }
 
     //minting the RfC
+    function mintRfC() external {
+        //To do in order to check that the data from the transaction coming are in the set of RfC valid inputs => loop through the enum (or
+        //  anything more efficient/involving less computation ops...)
+    }
 
     //Define some mandatory fields for a RfC to be minted
 
