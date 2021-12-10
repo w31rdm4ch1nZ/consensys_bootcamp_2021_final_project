@@ -4,8 +4,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity ^0.8.0;
 
-contract Escrow is Ownable {
-    
+import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
+
+
+contract Escrow {
+    //as I will limit my use in this contract to ether, maybe it is not useful - but surely it will for the core contracts such as FundsManager
+    using SafeERC20 for IERC20;
     /*address public immutable FundsManagerCore = "{address of the contract acting as PCV and all content related >>funding<< logic}"; */
 
     //a hold (to prevent abuses, spamming the CPs/participants) of 30 days on every deposit that initiates a proposal (on which can be made some yield profit - TBD if 
