@@ -44,6 +44,7 @@ contract UserRoles {
     // reduce the overhead and the need for trust that an off-chain DAO, or even a central third-party, would require otherwise.)
     //bytes32 public constant PAUSER_ALL_TXS_FOR_EMERGENCY_CLAIM_ROLE = keccak256("EMERGENCY_PAUSE_FOR_CLAIM_ROUND");  
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant OPERATOR_ROLE = keccak256("OPERATOR_ROLE"); //describes the role of your contracts able to call ERC1155 functions
     bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
 
 

@@ -21,7 +21,9 @@ contract IERC1155TokenReceiver is IERC165 {
         @param data Additional data with no specified format
         @return `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))` if transfer is allowed
     */
-    function onERC1155Received(
+
+    //operator should (use a role that you authorize) be one of your core contracts (likely FundsManager, maybe RfCminter)
+    function authorize(
         address operator,
         address from,
         uint256 id,

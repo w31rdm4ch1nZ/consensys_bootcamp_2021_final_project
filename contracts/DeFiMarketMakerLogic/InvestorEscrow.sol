@@ -28,6 +28,8 @@ contract Escrow {
 
     address public participant;
 
+    mapping(address => mapping(address => uint)) public allowance;
+
     mapping (address => uint256) public balance;
 
     mapping (address => uint256) public balanceInvestorsPool;
@@ -85,6 +87,7 @@ contract Escrow {
     //  knowingly sen their funds for a specific action in the protocol)
     /*
     function () public payable onlyInvestor {
+        require(msg.sender == WETH, "only Eth or Weth fallback to eth contract")
         userHasADeposit[msg.sender] = true;
         balance[adress(this)] += msg.value;
 
@@ -93,6 +96,21 @@ contract Escrow {
         emit Escrowed(msg.sender, adress(this), msg.value, _matureTime);
     };
     */
+
+    function _approve(address owner, address spender, uint value) private {
+        allowance[owner][spender] = value;
+        emit Approval(owner, spender, value);
+    }
+
+    /** 
+    function transferFrom(address from, address to, uint value) external returns (bool) {
+        if (allowance[from][msg.sender] != uint(-1)) {
+            allowance[from][msg.sender] = allowance[from][msg.sender].sub(value);
+        }
+        _transfer(from, to, value);
+        return true;
+    }
+    **/
 
     function lockFunds(address investor, uint256 _timeMaturity) internal {
         //Check pattern usually used for this purpose (as a resting time before actual unstaking happeing for instance)
@@ -171,10 +189,11 @@ contract Escrow {
 
     }
 
-    //an authorization function that makes users accepting the protocol to use their funds => handled through metamask and web3.js
+    //an authorization function that makes users accepting the protocol to use their funds => handled through metamask and web3.js => check if one exists in
+    // ERC1155 standard
     function userProtocolFundsAllowance(address _account, uint _amount) public {
         
-        //user allows protocol to use the deposited amount by the protocol
+        //user allows protocol to use their deposit amount
         userProtocolWithdrawAuthorization[_account] = true;
 
         emit ProtocolAllowed(_account, balance[_account]);
@@ -188,25 +207,28 @@ contract Escrow {
     
     /**
     function withdrawFromEscrow(address _account, uint256 _amount) external {
-    require(= msg.sender, "Must own token to claim underlying Eth");
+        require(= msg.sender, "Must own token to claim underlying Eth");
 
-    (uint256 amount, uint256 matureTime) = escrowNFT.tokenDetails(_tokenId);
-    require(matureTime <= block.timestamp, "Escrow period not expired.");
+        (uint256 amount, uint256 matureTime) = escrowNFT.tokenDetails(_tokenId);
+        require(matureTime <= block.timestamp, "Escrow period not expired.");
 
-    escrowNFT.burn(_tokenId);
+        escrowNFT.burn(_tokenId);
 
-    (bool success, ) = msg.sender.call{value: amount}("");
+        (bool success, ) = msg.sender.call{value: amount}("");
 
-    require(success, "Transfer failed.");
+        require(success, "Transfer failed.");
 
-    emit Redeemed(msg.sender, amount);
+        emit Redeemed(msg.sender, amount);
     }
 
     **/
 
     // a protocol authorization previous to any withdraw (above function) to be successfull
+    //      require(unlock) 
+    //      require(time >= maturationTime)
+    //      require(_amount <= balance[msg.sender])
 
-    //withraw funds for the protocol FundsManager core contracts => specifically its address and no one else (no other ethereum account) should
+    //ROLE AUTHORIZATION TBD: withraw funds for the protocol FundsManager core contracts => specifically its address and no one else (no other ethereum account)
     // should be able to withdraw those funds
 
     //recieve funds from the Protocol:
