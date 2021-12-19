@@ -8,30 +8,44 @@ import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 
 
-contract Escrow {
-    //as I will limit my use in this contract to ether, maybe it is not useful - but surely it will for the core contracts such as FundsManager
-    using SafeERC20 for IERC20;
-    /*address public immutable FundsManagerCore = "{address of the contract acting as PCV and all content related >>funding<< logic}"; */
+contract InvestorsEscrow {
+    //>>as I will limit my use in this contract to ether, maybe it is not useful - but surely it will for the core contracts such as FundsManager
+    //using SafeERC20 for IERC20;
+    
+    /*>>>>> MAKING SURE THIS ESCROW CONTRACT CALLS AND IS CALLED ONLY BY THE ACTUAL INSTANCES OF OUR PROTOCOL's CONTRACT:
+            address public immutable FundsManagerCore = "{address of the contract acting as PCV and all content related >>funding<< logic}"; 
+     <<<<<<
+    */
 
-    //a hold (to prevent abuses, spamming the CPs/participants) of 30 days on every deposit that initiates a proposal (on which can be made some yield profit - TBD if 
-    // those go to the procotol only, or some are given back to the user initiating a proposal) => won't affect users wanting to access content (and pay for it).
-    // This constant is used for any Investor transaction. How do you target those transactions?:
+    //a hold (to prevent abuses, spamming the CPs/participants) of 30 days on every deposit that initiates a proposal 
+    // (on which can be made some yield profit)
+    //  => won't affect users wanting to access content (and pay for it).
+    
+    // This constant is used for the proposal phase Investor transaction (another is used with a different time value, part of the RfC itself, for all other txs). 
+    //  How do you target those transactions?:
     //  - RfCProposal
     //  - RfCCommitFunds (like a staking contract where investors stake some funds to signal both their interest in the RfC and the intensity of their interest
     //      with the amount they are willing to commit - one caveat that I want to prevent is that the shares in the RfC are eventually maipulable or
     //      subject to be defined by monopoly power. So I decide to define the shares on a content a la "quadratic voting")
-    //  - 
+    //  - ...
     uint256 public immutable MIN_ESCROW_TIME = 30 days; //check for how to set a duration/expiration time, etc.
 
     // RequestForContent public RfC;
-    //bool public initialized = false;
+    uint RfCId;
+    //a value that says when a RfC is passes the proposal round and is now in "processing" (by a CP) status:
+    bool public validate = false;
 
     address public participant;
 
+    //get an investor the authorization to the protocol to use a certain amount 
+    // (the amount the user-investor sent) 
     mapping(address => mapping(address => uint)) public allowance;
 
     mapping (address => uint256) public balance;
 
+    //just want to be able to have a get function to query balance investors related to a RfC ID for the user 
+    //  to have access to this information => could be a uint returned before funds are pulled by FundsManager
+    //  contract for a specific RfC id
     mapping (address => uint256) public balanceInvestorsPool;
 
     uint256 investorFundsPooled;
@@ -43,6 +57,13 @@ contract Escrow {
     uint256 public amount;
 
     mapping (address => bool) public isInvestor;
+
+    //initialized only if RfC is passed
+    struct RfCBalance {
+        uint256 RfCId; 
+        uint256 amountRfC;
+        uint256 time;       //not sure needed => would record the amount of funding for an RfC at a given time
+    }
 
     // RfC proposition exists under the form of a dynamic array built through the frontend. It is not a token minted as I don't want individuals
     //  to have to pay for minting a proposal - think of my use case for a "crowdjournalism" application.
@@ -97,10 +118,18 @@ contract Escrow {
     };
     */
 
+
+    //function where users give approval to the FundsManager contract to withdraw their funds from this escrow
+    // contract => spender = FundsManager contract address on your testnet
+    //  Very likely that you will use the IERC1155 function approval for that (?)
     function _approve(address owner, address spender, uint value) private {
-        allowance[owner][spender] = value;
-        emit Approval(owner, spender, value);
+        //
+
+        operator = sender;
+        setApprovalForAll(operator, true);
     }
+
+    function depositForProposal() external onlyOwner returns (uint256 RfCBalance) {}
 
     /** 
     function transferFrom(address from, address to, uint value) external returns (bool) {

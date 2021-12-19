@@ -55,13 +55,7 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         __ERC1155Supply_init();
         __UUPSUpgradeable_init();
 
-        //Obviously the goal is to set up different multi-sig accounts for each role - that is just to consider as a scaffolding or example: 
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _setupRole(URI_SETTER_ROLE, msg.sender);
-        _setupRole(PAUSER_ROLE, msg.sender);
-        _setupRole(MINTER_ROLE, msg.sender);
-        _setupRole(UPGRADER_ROLE, msg.sender);
-        _setupRole(FUNDSMANAGER_ROLE, msg.sender);
+
     }
 
     // The following functions are overrides required by Solidity.
@@ -258,15 +252,11 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         //TO DO
     }
 
-    //minting the RfC
-    function mintRfC() external {
-        //To do in order to check that the data from the transaction coming are in the set of RfC valid inputs => loop through the enum (or
-        //  anything more efficient/involving less computation ops...)
-    }
+    
 
     //Define some mandatory fields for a RfC to be minted
 
-    //Mint of a RfC to enter the proposal to CPs cycle will require from investors to commit funds/send funds to the escrow 
+    //Set a RfC structure (built with inputs from the Proposer) to enter the proposal to CPs cycle will require from investors to commit funds/send funds to the escrow 
     // contract
 
     //RfC struct has to pass some basic conditions: 
@@ -275,10 +265,20 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
     // components <= 256 (check if data type like struct can have more elements??)
     // controls on the mandatory fields (to be defined in your contract - eg. at least one contentType, etc.) 
 
-    function mintRfc(RequestForContent RfC, bool isFinalized, int256 fundsPooledInvestorsAmount, uint256 fundsPooledCPsAmount) external returns() {};
+    function setRfC(RequestForContent RfC, bool isFinalized, int256 fundsPooledInvestorsAmount, uint256 fundsPooledCPsAmount) external returns() {};
         //TO DO
 
         //NFT minted, incorporating the possibilities to be then splitted (as for Gnosis Conditional Tokens)
+    }
+
+    //Following ERC1155 standard:
+    //minting the RfC => calls to ERC1155 contracts/interfaces (import them)
+    function mintRfC() external {
+        //To do in order to check that the data from the transaction coming are in the set of RfC valid inputs => loop through the enum (or
+        //  anything more efficient/involving less computation ops...)
+
+        _mint(address toRfCEscrow, uint256 RfCId, int256 )
+
     }
 
     //called in mint function (probably?)

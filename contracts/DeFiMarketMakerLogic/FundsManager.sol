@@ -114,9 +114,10 @@ contract FundsManager {
     }
     */
 
-    //>>>>Same, not sure I keep this direct call from any user on this contract...<<<<
+    //>>>>SEE ESCROW pattern chosen over direct calls on this contract<<<<
     /// @notice a user can read the value of funds held by the contract (before they are put in the "management cycle")
     /// @return The balance of the user
+    /*
     function getBalance() public view returns (uint) {
       // 2. Get the balance of the sender of this transaction
       return balances[msg.sender];
@@ -131,7 +132,7 @@ contract FundsManager {
     function getContractBalance() public view returns(uint) {
         return balance(address(this));      // address(this) refers to the current contract address (instance deployed)
     }
-
+    
 
     //TBD: commit scheme to signal interest and intensity of this interest for a RfC by investors
 
@@ -143,6 +144,7 @@ contract FundsManager {
     // I think it leads to use several steps instead of one (deposit money):
         //
     function 
+    */
 
     function receiveFunds(address _from, uint _amount) public payable {
         //1st function to handle every deposit = before any user's classification, or any swap or tapping in any yield protocol.
@@ -170,6 +172,13 @@ contract FundsManager {
         */
 
     } 
+
+
+    //call to 1155 functions to trigger an action from this core contract to the escrow contract (in an automated way - so the idea is 
+    //  that through this core-periphery pattern I get more security over the most critical functions, reducing external control to
+    //   a few roles predefined like GOVERNOR in FEI protocol - multi-sig EOA, as for all roles):
+
+
 
     /// @notice withdraw ERC20 from the contract
     /// @param token address of the ERC20 to send

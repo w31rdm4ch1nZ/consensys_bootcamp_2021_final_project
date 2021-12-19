@@ -19,6 +19,6 @@ import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 
 contract RfCEscrow {
 
-    //TO DO => next iteration, focusing on "crowdjournalism" use case.
+    //TO DO => next iteration, focusing on "crowdjournalism" use case (?)
 
 }

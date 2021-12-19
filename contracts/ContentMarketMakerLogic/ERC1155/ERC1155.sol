@@ -154,6 +154,7 @@ contract ERC1155 is ERC165, IERC1155
         require(ids.length == values.length, "ERC1155: IDs and values must have same lengths");
         require(to != address(0), "ERC1155: target address must be non-zero");
         require(
+            //will take the role defined as GOVERNOR (// with FEI protocol):
             from == msg.sender || _operatorApprovals[from][msg.sender] == true,
             "ERC1155: need operator approval for 3rd party transfers."
         );
