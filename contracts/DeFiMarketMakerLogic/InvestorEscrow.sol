@@ -17,8 +17,8 @@ contract InvestorsEscrow {
      <<<<<<
     */
 
-    //a hold (to prevent abuses, spamming the CPs/participants) of 30 days on every deposit that initiates a proposal 
-    // (on which can be made some yield profit)
+    //a hold (to prevent abuses, spamming the CPs/participants) of 30 days on every deposit that initiates 
+    // a proposal (on which can be made some yield profit)
     //  => won't affect users wanting to access content (and pay for it).
     
     // This constant is used for the proposal phase Investor transaction (another is used with a different time value, part of the RfC itself, for all other txs). 
@@ -31,9 +31,10 @@ contract InvestorsEscrow {
     uint256 public immutable MIN_ESCROW_TIME = 30 days; //check for how to set a duration/expiration time, etc.
 
     // RequestForContent public RfC;
-    uint RfCId;
+    uint256 RfCId;
+
     //a value that says when a RfC is passes the proposal round and is now in "processing" (by a CP) status:
-    bool public validate = false;
+    bool public hasPassed = false;
 
     address public participant;
 
@@ -108,28 +109,43 @@ contract InvestorsEscrow {
     //  knowingly sen their funds for a specific action in the protocol)
     /*
     function () public payable onlyInvestor {
-        require(msg.sender == WETH, "only Eth or Weth fallback to eth contract")
+        require(msg.sender == WETH, "only Eth or Weth fallback to eth contract") //WETH works for us as Uniswap uses it anyway for our swap
         userHasADeposit[msg.sender] = true;
         balance[adress(this)] += msg.value;
+        
+        //call a function defined either in this contract as "internal" call, or in the FundsManager contract
+        _lockFunds(msg.sender);
 
         emit Deposit(msg.sender, msg.value);
-        lockFunds(msg.sender, );
+        
         emit Escrowed(msg.sender, adress(this), msg.value, _matureTime);
     };
     */
 
 
     //function where users give approval to the FundsManager contract to withdraw their funds from this escrow
-    // contract => spender = FundsManager contract address on your testnet
-    //  Very likely that you will use the IERC1155 function approval for that (?)
-    function _approve(address owner, address spender, uint value) private {
-        //
+    // contract => spender = FundsManager contract address on your testnet - make sure it can only authorizes
+    // the actual instance of your contract (through authorization roles pattern defined in the AccessControl 
+    // contract)
+    function _approve(address owner/*,address spender, uint256 value*/) private {
 
-        operator = sender;
+        value = msg.value;
+
+        //owner is the role defined by us having rights on this contract (admin of the escrow for pausing emergency,
+        //  or emergency transfer of the funds, ..? => it should be a multi-sig contract, where at least one of
+        //  the required key is another contract controlled by some of the investors (a few of them
+        //  are assigned randomly this role, done each time for a new RfC => TO DO: next iteration, where I'll go deeper
+        // in multi-sig control over EOA and contracts, and how to compose with it))
+
+        //owner is a multi-sig contract, that can send the funds to the spender (see where the value is accessed
+        //  maybe again in FundsManager), our FundsManager contract:
+        // spender is actually assigned inside the FundsManager contract as address(this), where this function 
+        //  is defined:
+        _safeTransfer(owner, value);
+        
         setApprovalForAll(operator, true);
     }
 
-    function depositForProposal() external onlyOwner returns (uint256 RfCBalance) {}
 
     /** 
     function transferFrom(address from, address to, uint value) external returns (bool) {
@@ -146,7 +162,7 @@ contract InvestorsEscrow {
     }
 
     function depositForRfCProposal(RfCProposal _rfcProposal,uint256 _RfCProposalID) public {
-        require(isInitiated[_RfCProposalID] != true, "Is already in proposal phase")    // might add the case where an exact same proposal 
+        require(isInitiated[_RfCProposalID] != true, "Is already in proposal phase");    // might add the case where an exact same proposal 
                                                                                         //  (so all proposal would be kept in a special RfCPrposalEscrow contract)
                                                                                         // can't be reproposed as is => give it some thinking....?
         emit DepositForProposal(msg.sender, proposalId, rfcId);
@@ -154,11 +170,14 @@ contract InvestorsEscrow {
 
     //function in which is called (or implemented in) a quadratic voting function + assign Investor role to the user + add sent amount to escrow balance
     // to be withdrawn by the Protocol FundsManager core contract
-    function depositForRfCInvestorValidation() public payable {
+    //>>>>>>>>FOR NOW, V2
+    function depositForRfCInvestorValidation() public payable returns (hasPassed, RfCId){
+        //TO DO (V2, or once you've done the minimal mechanics)
+        
         //require
 
         //set role
-        isInvestor[msg.sender] = true;
+        //isInvestor[msg.sender] = true;
 
         //set authorization for FundsManager contract to withdraw the funds
 
@@ -168,32 +187,45 @@ contract InvestorsEscrow {
 
     }
 
+    function depositPayAccessContent(uint256 _RfCId, uint256 _amount) external {
+        //as investors have shares to a content they produce (that they can eventually sell to other users,
+        //  but that will change their status back ti users, or RfCIdInvestor = false), they 
+        //  will call another function to access content, if needed, that encodes the logic of their shares
+        //  in the content, etc. 
+        require(msg.sender != Investor, "investors in this RfC should access this content through their dashboard");
 
+        //should return a token that gives them all data/authorization to access content
+    } 
 
-    //Specific to CPs answering to a proposal, to manifest their interest in producing/creating this content. It interacts with a reverse auction contract that
-    //  itself is meant to achieve in the best (trustless and efficient trade-off acceptable) possible way the coordination between investors and CPs.
-    //  => solve this pb now: how investors and CPs "agree"/coordinate on the funding amount for a given RfC?:
+    //Specific to CPs answering to a proposal, to manifest their interest in producing/creating this content.
+    // It interacts with a reverse auction contract that
+    //  itself is meant to achieve in the best (trustless and efficient trade-off acceptable) possible way 
+    //  the coordination between investors and CPs.
+    //      => solve this pb now: how investors and CPs "agree"/coordinate on the funding amount 
+    //  for a given RfC?:
+
     /** 
         >>>>>>>>
         IMPORTANT TO NOTE: AT THIS POINT, I HAVE NOT FORMULATED ANYTHING THAT WOULD RULE OUT FROM MY
-        PROPOSAL ROUND AND THE QUADRATIC VOTING USE A SIMPLE SYBIL (multiple account owned by one entity) ATTACK
+        PROPOSAL ROUND AND THE QUADRATIC VOTING  A SIMPLE SYBIL ATTACK (multiple account owned by one entity)
             => it would require something like Proof of humanity od a DID service.
         <<<<<<<< 
         
-        - 1 possibility (complex I think... as I don't think of any other way than doing it through some sort of zk-proof scheme -> could search if "simple" 
-        implementation of that for a vote on the web?): 
-            -> a sort of "silent reverse auction" where the CPs don't know the max amount investors are ready to commit for one
-                RfC, and the investors don't know the min amount for which CPs are ready to accept to commit to deliver the Content/Product.
-                    => what would be precisely this mechanism?
-                        - each participants commits a max investment amount they commit to put under escrow (but don't do yet so it stays secret, but also
-                            that have to force them to then commit for the minEscrowTime if the outcome is a miss);
-                        - each willing Content Provider commits a min amount for which they would accept to create and distribute/make accessible the content;
-                            => an auction mechanism starts with a minimum amount publicly defined in the RfCProposal where investors can "enter" multiple times/
-                            signal their interest (canceling the previous bid with the highest at a given time - they have the possibility to
-                            predetermine their maximum and so the auction goes for the remaining investors and the CPs), and the CPs can choose to commit
-                            to an amount, which in our proptocol binds them to deliver the content and be rewarded for it, or being punished by losing part or all of their 
-                            escrowed funds.  
-                    => how to implement such a mechanism? (cf. https://eprint.iacr.org/2018/704.pdf for most of the elements defined fromally in pseudo-code)
+        - 1 possibility (complex I think... as I don't think, of any other way than doing it through 
+        some sort of zk-proof scheme -> could search if "simple" implementation of that for a vote on the web?): 
+            -> a sort of "silent reverse auction" where the CPs don't know the max amount investors are ready 
+            to commit for one RfC, and the investors don't know the min amount for which CPs are ready to accept 
+            to commit to deliver the Content/Product.
+                => what would be precisely this mechanism?
+                    - each participants commits a max investment amount they commit to put under escrow (but don't do yet so it stays secret, but also
+                        that have to force them to then commit for the minEscrowTime if the outcome is a miss);
+                    - each willing Content Provider commits a min amount for which they would accept to create and distribute/make accessible the content;
+                        => an auction mechanism starts with a minimum amount publicly defined in the RfCProposal where investors can "enter" multiple times/
+                        signal their interest (canceling the previous bid with the highest at a given time - they have the possibility to
+                        predetermine their maximum and so the auction goes for the remaining investors and the CPs), and the CPs can choose to commit
+                        to an amount, which in our proptocol binds them to deliver the content and be rewarded for it, or being punished by losing part or all of their 
+                        escrowed funds.  
+                => how to implement such a mechanism? (cf. https://eprint.iacr.org/2018/704.pdf for most of the elements defined fromally in pseudo-code)
 
                     => I actually might be able to implement a quadratic voting and secret auction as I want with the AztecProtocol SDK:
                     https://docs.aztecprotocol.com/#/Introduction
@@ -212,7 +244,7 @@ contract InvestorsEscrow {
                     a commit to RfC. Why? Because, in the end it is in the overall interest to have a Content DELIVERED, and one of the thing that could happen
                     is to have CPs to be incentivized at the proposal moment to accept low funding resulting in low quality of content or excessive rate
                     of undeilvered contents. So second lowest commit will win. 
-                        => 
+
     **/
     function depositForRfCCPValidation() public payable {
 
@@ -257,7 +289,8 @@ contract InvestorsEscrow {
     //      require(time >= maturationTime)
     //      require(_amount <= balance[msg.sender])
 
-    //ROLE AUTHORIZATION TBD: withraw funds for the protocol FundsManager core contracts => specifically its address and no one else (no other ethereum account)
+    //ROLE AUTHORIZATION TBD: withraw funds for the protocol FundsManager core contracts 
+    // => specifically its address and no one else (no other ethereum account)
     // should be able to withdraw those funds
 
     //recieve funds from the Protocol:
