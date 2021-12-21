@@ -34,7 +34,8 @@ contract InvestorsEscrow {
     uint256 RfCId;
 
     //a value that says when a RfC is passes the proposal round and is now in "processing" (by a CP) status:
-    bool public hasPassed = false;
+    //  => this value should be returned to this contract by the contract implementing the proposal logic
+    // bool public hasPassed = false;
 
     address public participant;
 
@@ -146,7 +147,6 @@ contract InvestorsEscrow {
         setApprovalForAll(operator, true);
     }
 
-
     /** 
     function transferFrom(address from, address to, uint value) external returns (bool) {
         if (allowance[from][msg.sender] != uint(-1)) {
@@ -246,6 +246,10 @@ contract InvestorsEscrow {
                     of undeilvered contents. So second lowest commit will win. 
 
     **/
+
+    function getRfCStatus(RfCId) public view returns(bool) {
+        _RfCStatus(RfCId);
+    }
     function depositForRfCCPValidation() public payable {
 
     }

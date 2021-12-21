@@ -10,6 +10,15 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155Pausable.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155Burnable.sol";
 
+/** 
+    TO DO
+    Out of the RfCProposalNFT (called by the content orchestrator) is minted the final RfC,
+    which is the same as the RfCProposalNFT, but with enriched content (all data pertaining
+    to the CP (address, amount, ...), the actual total funds once all investors send it during
+    the funding/approval round).
+**/
+
+
 //**the upgradable pattern** is chosen in the event of a real dapp evolution, as I would like a beta to be available to the public, 
 // but also that they keep their access to the contents and the shares on those contents produced in the beta phase, w/o a cumbersome 
 // upgrade and migration at their gas cost, and implying operations from those users that might be challenging for some. 
@@ -116,7 +125,8 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
                             // to CPsProposition step (it avoids cost of new minting and the cost of the compounded Yield assotiated 
                             // operations))
         contentAccessibleByInvestors,
-        contentAccessForEveryone
+        contentAccessForEveryone,
+        //...,
     }
 
 
@@ -131,6 +141,7 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         Audio,
         Article,
         Software,
+        //...,
         undefined               // => just used to disqualified a proposal before it reaches the proposal round (there will be also a grey/uncliclable 
                                 // are as long as the proposal don't include this mandatory field)
     }
@@ -150,14 +161,15 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         txt,
         pdf,
         latex,
-        css
-        html
+        css,
+        html,
         javascript,
         typescript,
         rust,
         WindowsExe,
         LinuxApp,
         dockerizedImage,
+        //...,
         undefined
     }
         // => result: add a component (that can be split later if necessary) to the RfC tokenized set of requirements
@@ -170,6 +182,7 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         Filecoin,
         Arweave,
         Siacoin,
+        //...,
         undefined
     }
 
@@ -183,7 +196,7 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         Siacoin,
         AWS,
         Azure,
-        ...,
+        //...,
         undefined
     }
 
@@ -192,7 +205,7 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         Google,
         GoogleMap,
         TheGraph,
-        ...,
+        //...,
         undefined
     }
 
@@ -219,20 +232,23 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         years nbYearsToDelivery,
     }
 
-
+    /*
+    >>>>>>Likely part of the next iteration
+    
     //then read (sequentially in memory) the struct so you can add (or not) those elements to the final RfC token: 
     struct Proofs {
         //in case users want to define a specific 
-        string ProofOfSpace,
-        string ProofOfExistence,
+        bytes ProofOfSpace,
+        bytes ProofOfExistence, //cf. your shell contract to have a better idea of how to implement those controls 
         //in case users want a content originating from a specific geo-location:
-        string ProofOfLocation,
-        string ProofOfAuthenticity,
-        string ProofOfUniqueness,
+        bytes ProofOfLocation,
+        bytes ProofOfAuthenticity,
+        bytes ProofOfUniqueness,
         //in case users want some specific entity/organization/individual to be part of the content production:
-        string ProofOfParticipation
+        bytes ProofOfParticipation
     }
-
+    <<<<<<<<
+    */
 
     //in memory, at execution time in EVM instantiation of the RfC as a struct of array (?)
 
@@ -243,8 +259,8 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         Platform[] platforms;
         dataRetrivedAPIToBeUSed[] APIs;
         Collateral[] RfCCollateral;
-        ...;
-        Properties[] RfCProperties
+        //...;
+        Properties[] RfCProperties;
     }
 
     //read function of te struct to extract offsets for properties, and metadata to be used, like length, etc.
@@ -290,6 +306,9 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         //TO DO
     }
 
+    //comparable to the split function in the Gnosis Conditional Token contract:
+    function burnSharesNFTforERC20(address _contentCreationOG, uint256 _contentPrice, )
+
     /// @dev This function splits RfC in the case a subset of the required components are to be delegated among several CPs. (I will limit for now the use case to that)
     //    REWORK for your RfC instead [/// @dev This function splits a position. If splitting from the collateral, this contract will attempt to transfer `amount` collateral from the message sender to itself. Otherwise, this contract will burn `amount` stake held by the message sender in the position being split worth of EIP 1155 tokens. Regardless, if successful, `amount` stake will be minted in the split target positions. If any of the transfers, mints, or burns fail, the transaction will revert. The transaction will also revert if the given partition is trivial, invalid, or refers to more slots than the condition is prepared with.]
 
@@ -297,6 +316,19 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
     /// @param partition An array of disjoint index sets representing a nontrivial partition of the outcome slots of the given condition. E.g. A|B and C but not A|B and B|C (is not disjoint). Each element's a number which, together with the condition, represents the outcome collection. E.g. 0b110 is A|B, 0b010 is B, etc. 
     ///         => adapt it to your
     /// @param amount The amount of collateral or stake to split.
+    
+    /*>>>>>>>ALSO, it is used for a content's share AMM<<<<<<<<,
+            starting with burning the NFT, representing shares on content, for ERC20 tokens
+            that are withdrawn from the protocol treasury to get stablecoin, proportional to
+            the amount a content is currently priced + fees received by investors
+            (weighted on a future fees/expected revenue that accrue a bit more the
+            content price but not linearly, as passed a certain point it is entirely dependent 
+            on exogenous market dynamics, eg. valuation of the content platform (like Livepeer)
+            instead of minting it from thin air as a native token - although in-between could be 
+            explored later on, depending on an analysis of the value creation by the protocol 
+            and the content brought to life through the use of this protocol).
+    <<<<<<<*/
+    
     function splitRfC(
         IERC721 setOfTasksDelegated,
         uint calldata RfCId,

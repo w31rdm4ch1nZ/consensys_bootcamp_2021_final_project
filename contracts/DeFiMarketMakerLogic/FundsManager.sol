@@ -177,7 +177,7 @@ contract FundsManager {
     //call to 1155 functions to trigger an action from this core contract to the escrow contract (in an automated way - so the idea is 
     //  that through this core-periphery pattern I get more security over the most critical functions, reducing external control to
     //   a few roles predefined like GOVERNOR in FEI protocol - multi-sig EOA, as for all roles):
-
+    
 
 
     /// @notice withdraw ERC20 from the contract
@@ -447,6 +447,7 @@ contract FundsManager {
     // proposal ends up having several CPs answering -> RfC split proposition (then exact split has to be accepted by
     // every CPs deciding to commit, with an order of importance (deciding of the dPOS: delegator -> delegatee) that goes
     // from mandatory fields to properties a-z ->  
+    
     
 
     function splitCPsFundsForDelegatees(RequestFoContent ) internal resturns() {
