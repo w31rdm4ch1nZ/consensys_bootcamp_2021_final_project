@@ -2,18 +2,18 @@
 pragma solidity >=0.4.22 <0.9.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+
 
 /** 
 
-  - Minted by FundsManager contract through a call to ERC1155 batchMint function
-  - Redeem is also done trough ERC1155 standard => "redeem" function for investors
-  will mean cToken for a given RfC are redeemed by FundsManager <-> Compound, then 
-  sent to InvestorEscrow contract, then can be redeemed by every user.
+  - ERC20 tokens minted by FundsManager contract through a call to ERC1155 batchMint function
+  - can be exchanged (based on the calculation of the share and its ERC20 equivalent)
+  - the share is actually updated when investors or CPs decide to sell their share of 
+    the content created
+  - 
 
 **/
-contract ContentShareNFT {
+contract ContentShare {
 
    uint256 public RfCcounter = 0;
 
