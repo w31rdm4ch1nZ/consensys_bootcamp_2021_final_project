@@ -6,11 +6,11 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
 contract RfCProposal is ERC721Burnable, ERC721Enumerable, Ownable  {
-
-    //constant
-    uint256 public immutable MIN_ESCROW_TIME = /* 30 days in either unix time or blocks estimation*/;
-
+    
+    // NFT data
     mapping(uint256 => uint256) public amount;
+    
+
     //specific to this contract is the matureTime - if in the context of a proposition, then matureTime should be of RfC proposal to CPs phase
     // minimum/standard (for now) duration + a hold (to prevent abuses) of 30 days hold on it (on which can be made some yield profit - TBD if 
     // those go to the procotol only, or some are given back to the user initiating a proposal).
@@ -21,6 +21,28 @@ contract RfCProposal is ERC721Burnable, ERC721Enumerable, Ownable  {
     mapping (address => uint256) balance;
 
     //Properties and components of an RfC: => check the RequestForContent contract:
+
+    //uint256 public RfCcounter = 0;
+
+
+    constructor() ERC721("ContentShareNFT", "ShareESCRW") {
+    }
+  
+    function mint(address _recipient, uint256 _amount, uint256 _matureTime, uint256 _share) public onlyOwner returns (uint256) {
+        _mint(_recipient, tokenCounter);
+
+        // set values
+        amount[tokenCounter] = _amount;
+        matureTime[tokenCounter] = _matureTime;
+        startingContentShare[] = _share;
+        
+        // increment counter
+        tokenCounter++;
+
+        return tokenCounter - 1; // return ID
+    }
+
+
 
     /** 
         TO DO
