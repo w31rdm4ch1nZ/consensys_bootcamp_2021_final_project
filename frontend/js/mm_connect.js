@@ -1,4 +1,4 @@
-//import MetaMaskOnboarding from '@metamask/onboarding'
+import MetaMaskOnboarding from '@metamask/onboarding'
 
 const forwarderOrigin = 'http://127.0.0.1:5500'
 
