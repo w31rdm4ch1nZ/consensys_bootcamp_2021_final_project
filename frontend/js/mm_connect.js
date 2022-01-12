@@ -34,11 +34,9 @@ const onboardButton = document.getElementById('connectButton')
 const getAccountsButton = document.getElementById('getAccounts')
 const getAccountsResults = document.getElementById('getAccountsResult')
 
-// Permissions Actions Section => replace by actions to initiate a new RfC => likely to need to go to a specific url dashboard, as the drop lists
-// will require more space 
-const requestPermissionsButton = document.getElementById('requestPermissions')
-const getPermissionsButton = document.getElementById('getPermissions')
-const permissionsResult = document.getElementById('permissionsResult')
+// Go to make a proposal
+const urlToRfCProposal = document.getElementById('goToRfCProposal')
+
 
 /** KEEP adapting this as your boilerplate for your use case */
 // Contract Section
@@ -47,8 +45,10 @@ const depositButton = document.getElementById('depositButton')
 const withdrawButton = document.getElementById('withdrawButton')
 const contractStatus = document.getElementById('contractStatus')
 
-// Send Eth Section
-const sendButton = document.getElementById('sendButton')
+// Send Eth Section for Investor (pass the ID # of the RfC the user wants to invest in)
+const sendButton = document.getElementById('investRfCidX')
+
+//
 
 // Send Tokens Section
 const tokenAddress = document.getElementById('tokenAddress')

@@ -34,12 +34,14 @@
         <header>
           <div id="logo-container">
             <h1 id="logo-text" class="text-center">
-                Generalized, permissionless and trustless Content Creation protocol
+                Generalized, permissionless and trustless </br>
+                 Content Creation protocol
             </h1>
-            </br></br></br>
+            </br></br>
             <h2>
                 A platform disintermediating the media industries!
             </h2>
+            </br>
             <p>Welcome netizens! This protocol is meant to empower you as a content creator, collector, curator, investor, producer, and anything you can think of in between.
             </p>
             
@@ -94,9 +96,9 @@
             <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">
+                  <h5 class="card-title">
                     Connect to an Ethereum network
-                  </h4>
+                  </h5>
   
                   <button
                     class="btn btn-primary btn-lg btn-block mb-3"
@@ -123,233 +125,87 @@
         </section>
   
         <section>
-          <div class="row d-flex justify-content-center">
-            <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">
-                    Initiate a Request for Proposal
-                  </h4>
+            <div class="row">
+          <!-- <div class="row d-flex justify-content-center"> -->
+                <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12 d-flex align-items-stretch">
+                    <div class="card full-width">
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                Get <b>access</b> to a content created through this protocol:
+                            </h6>
+                            <hr />
+                            <a rel="investor dashboard" href="./access_deliveredRfC_listing.html">
+                            <p>Go to the list of content already produced and made accessible</p>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            
 
-                  <p class="info-text alert alert-secondary">
-                  <a rel="investor dashboard" href="./RfC.html">
-                  <p>Go to the Request for Content dashboard</p>
-                  
-  
-                  <p class="info-text alert alert-secondary">
-                    RfC minted successfully: <span id="mintResult"></span>
-                  </p>
+                <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12 d-flex align-items-stretch">
+                    <div class="card full-width">
+                        <div class="card-body">
+                            <h6 class="card-title">
+                            <b>Initiate</b> a new Request for Proposal:
+                            </h6>
+                            <hr />
+                            <a rel="investor dashboard" href="./RfC.html">
+                            <p>Go to the Request For Content specification page</p>
+                            </a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
-              </div>
+          
             </div>
-          </div>
+
+        
+        </section>
+
+            <section>
+                <div class="row">
+              <!-- <div class="row d-flex justify-content-center"> -->
+                    <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12 d-flex align-items-stretch">
+                    <div class="card full-width">
+                        <div class="card-body">
+                        <h6 class="card-title">
+                            Become a <b>Content Provider</b> and commit to deliver a content specified by a Request For Content:
+                            
+                        </h6>
+          
+                        <hr />
+                        <a rel="investor dashboard" href="./CP_dashboard.html">
+                        <p>Go to the Content Provider dashboard</p>
+                        </a>
+                        </p>
+                    </div>
+                </div>
+                </div>
+
+                <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12 d-flex align-items-stretch">
+                    <div class="card full-width">
+                        <div class="card-body">
+                            <h6 class="card-title">
+                            Become an <b>Investor</b> and be an active part on the content creation defined by a Request For Content token
+                            </h6>
+                            <hr />
+                            <a rel="investor dashboard" href="./investor_dashboard.html">
+                            <p>Go to the Investor dashboard</p>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        
         </section>
   
-        <section>
-          <div class="row">
-            <div
-              class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12 d-flex align-items-stretch"
-            >
-              <div class="card full-width">
-                <div class="card-body">
-                  <h4 class="card-title">
-                    Contract
-                  </h4>
-  
-                  <button
-                    class="btn btn-primary btn-lg btn-block mb-3"
-                    id="deployButton"
-                    disabled
-                  >
-                    Deploy Contract
-                  </button>
-  
-                  <button
-                    class="btn btn-primary btn-lg btn-block mb-3"
-                    id="depositButton"
-                    disabled
-                  >
-                    Deposit
-                  </button>
-  
-                  <button
-                    class="btn btn-primary btn-lg btn-block mb-3"
-                    id="withdrawButton"
-                    disabled
-                  >
-                    Withdraw
-                  </button>
-  
-                  <p class="info-text alert alert-secondary">
-                    Contract Status: <span id="contractStatus">Not clicked</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-  
-            <div
-              class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12 d-flex align-items-stretch"
-            >
-              <div class="card full-width">
-                <div class="card-body">
-                  <h4 class="card-title">
-                    Send Eth
-                  </h4>
-  
-                  <button
-                    class="btn btn-primary btn-lg btn-block mb-3"
-                    id="sendButton"
-                    disabled
-                  >
-                    Send
-                  </button>
-  
-                  <hr />
-  
-                  <h4>
-                    Sign Typed Data
-                  </h4>
-  
-                  <button
-                    class="btn btn-primary btn-lg btn-block mb-3"
-                    id="signTypedData"
-                    disabled
-                  >
-                    Sign
-                  </button>
-  
-                  <p class="info-text alert alert-warning">
-                    Sign Typed Data Result: <span id="signTypedDataResult"></span>
-                  </p>
-                </div>
-              </div>
-            </div>
-  
-            <div
-              class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12 d-flex align-items-stretch"
-            >
-              <div class="card full-width">
-                <div class="card-body">
-                  <h4 class="card-title">
-                    Send Tokens
-                  </h4>
-  
-                  <p class="info-text alert alert-success">
-                    Token: <span id="tokenAddress"></span>
-                  </p>
-  
-                  <button
-                    class="btn btn-primary btn-lg btn-block mb-3"
-                    id="createToken"
-                    disabled
-                  >
-                    Create Token
-                  </button>
-  
-                  <button
-                    class="btn btn-primary btn-lg btn-block mb-3"
-                    id="transferTokens"
-                    disabled
-                  >
-                    Transfer Tokens
-                  </button>
-  
-                  <button
-                    class="btn btn-primary btn-lg btn-block mb-3"
-                    id="approveTokens"
-                    disabled
-                  >
-                    Approve Tokens
-                  </button>
-  
-                  <button
-                    class="btn btn-primary btn-lg btn-block mb-3"
-                    id="transferTokensWithoutGas"
-                    disabled
-                  >
-                    Transfer Tokens Without Gas
-                  </button>
-  
-                  <button
-                    class="btn btn-primary btn-lg btn-block mb-3"
-                    id="approveTokensWithoutGas"
-                    disabled
-                  >
-                    Approve Tokens Without Gas
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-  
-        <section>
-          <div class="row">
-            <div
-              class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12 d-flex align-items-stretch"
-            >
-              <div class="card full-width">
-                <div class="card-body">
-                  <h4 class="card-title">
-                    Encrypt / Decrypt
-                  </h4>
-  
-                  <button
-                    class="btn btn-primary btn-lg btn-block mb-3"
-                    id="getEncryptionKeyButton"
-                    disabled
-                  >
-                    Get Encryption Key
-                  </button>
-  
-                  <hr />
-  
-                  <div id="encrypt-message-form">
-                    <input
-                      class="form-control"
-                      type="text"
-                      placeholder="Message to encrypt"
-                      id="encryptMessageInput"
-                    />
-  
-                    <button
-                      class="btn btn-primary btn-lg btn-block mb-3"
-                      id="encryptButton"
-                      disabled
-                    >
-                      Encrypt
-                    </button>
-                  </div>
-  
-                  <hr />
-  
-                  <button
-                    class="btn btn-primary btn-lg btn-block mb-3"
-                    id="decryptButton"
-                    disabled
-                  >
-                    Decrypt
-                  </button>
-  
-                  <p class="info-text alert alert-secondary">
-                    Encryption key: <span id="encryptionKeyDisplay"></span>
-                  </p>
-  
-                  <p class="info-text text-truncate alert alert-secondary">
-                    Ciphertext: <span id="ciphertextDisplay"></span>
-                  </p>
-  
-                  <p class="info-text alert alert-secondary">
-                    Cleartext: <span id="cleartextDisplay"></span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+
       </main>
     
-    <!-- a link redirecting to investor dashboard, and then all buttons for the specific txs -->
+    
     <div>
         <a rel="investor dashboard" href="./RfC.html">
             <p>Go to the Request for Content dashboard</p>

@@ -3,7 +3,7 @@ section {
   }
   
   .info-text {
-    font-size: 1.1em;
+    font-size: 0.8em;
   }
   
   .full-width {
@@ -13,3 +13,7 @@ section {
   .card {
     margin-bottom: 20px;
   }
+
+#content {
+  text-align: center;
+}
