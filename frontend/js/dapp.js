@@ -157,6 +157,8 @@ const initialize = () => {
     //fundsManagerContract = web3.eth.contract([{
     //then, requestForContentContract = web3.eth.contract([{}])
 
+    // an authorization given by the user to use his Eth
+
     /**
      * Sending ETH
      */
