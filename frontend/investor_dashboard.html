@@ -88,7 +88,7 @@
                   
                 <p class="info-text alert alert-secondary">Deposit the amount you desire to invest in this RfC:</p>
                 
-                <input type="text" id="RfCid" name="RfCid"><br><br>
+                <input type="text" id="amountInvestedEth" name="amountInvestedEth"><br><br>
 
                 <button
                   class="btn btn-primary btn-lg btn-block mb-3"
@@ -115,13 +115,13 @@
                   Display information regarding your investment in a Request for Content:
                 </h6>
 
-                <p class="info-text alert alert-secondary">List of RfC you invested in so far:</p>
+                <p id="investmentsList" class="info-text alert alert-secondary">List of RfC you invested in so far:</p>
 
-                <p class="info-text alert alert-secondary">Enter the #id of the RfCn:</p>
+                <p id="RfCidToDisplay" class="info-text alert alert-secondary">Enter the #id of the RfC:</p>
                   <input type="text" id="RfCid" name="RfCid"><br><br>
                   <button
                   class="btn btn-primary btn-lg btn-block mb-3"
-                  id="investButton"
+                  id="displayInvestmentInfoButton"
                   disabled
                 >
                   Display
@@ -206,7 +206,7 @@
 </main>
 </body>
 
-<script src="./js/mm_connect.js" defer></script>
+<script src="./js/dapp.js" defer></script>
 
 </br></br></br>
 
