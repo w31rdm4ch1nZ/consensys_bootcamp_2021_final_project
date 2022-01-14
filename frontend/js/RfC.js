@@ -1,39 +1,10 @@
-// For the thumbnail demo! :]
+//To set date in smart-contract with web3.js:
 
-var count = 1
-setTimeout(demo, 500)
-setTimeout(demo, 700)
-setTimeout(demo, 900)
-setTimeout(reset, 2000)
+let date = (new Date()).getTime();
+let birthDateInUnixTimestamp = date / 1000;
+await BirthDate.methods.set(birthDateInUnixTimestamp).send(opts);
 
-setTimeout(demo, 2500)
-setTimeout(demo, 2750)
-setTimeout(demo, 3050)
+//To get date from smart-contract with web3.js:
 
-
-var mousein = false
-function demo() {
-   if(mousein) return
-   document.getElementById('demo' + count++)
-      .classList.toggle('hover')
-   
-}
-
-function demo2() {
-   if(mousein) return
-   document.getElementById('demo2')
-      .classList.toggle('hover')
-}
-
-function reset() {
-   count = 1
-   var hovers = document.querySelectorAll('.hover')
-   for(var i = 0; i < hovers.length; i++ ) {
-      hovers[i].classList.remove('hover')
-   }
-}
-
-document.addEventListener('mouseover', function() {
-   mousein = true
-   reset()
-})
+let birthDateInUnixTimestamp = await BirthDate.methods.get().call();
+let date = new Date(birthDateInUnixTimestamp * 1000);

@@ -31,7 +31,7 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155Burnable.sol";
 //  - Splitted RfC if it happens
 //  - ...
 
-contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*OwnableUpgradeable,*/ ERC1155SupplyUpgradeable, UUPSUpgradeable {          
+contract RequestForContent is ERC1155/*, Initializable, ERC1155Upgradeable, OwnableUpgradeable, ERC1155SupplyUpgradeable, UUPSUpgradeable*/ {          
 
     //Each type of content is linked to one or several protocols (Filecoin, Audius, LivePeer, etc.), each linked 
     //to a certain collateral that will allow the payment of the fees to become the medium of the content 
@@ -41,31 +41,13 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
     // input some data from th UI frontend - through web3.js or so, in a way that can't be tampered with (if it is even possible without using a central server, and is using the security
     // model of ethereum smart contract).
 
-    
-    //        >>>>>>>>>>>>>>Following the openzeppelin wizard:<<<<<<<<<<<<<<<<<
+    uint256 public RfCid;
 
-    //I will have to redefine some of the roles
+    uint256 private fundsPooledForRfC;  // should be set after mint...? (because unknown at proposal)
 
-    // I prefer a role pattern with multi-sig accounts (that would evolve in theory towards some DAO councils-like owned roles)over the ownable pattern,
-    // where too much power is given to an account or even a simple role. Also, as I mentioned, if I were to see this dapp to evolve, I'd like a fully-fledged
-    // DAO-like governance (where needed), and so I see this role-based model as closer, hence easier to upgrade in the (hypotheticla) future of the dapp: 
-    bytes32 public constant URI_SETTER_ROLE = keccak256("URI_SETTER_ROLE");
-    bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-    bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
-    bytes32 public constant UPGRADER_ROLE = keccak256("FUNDSMANAGER_ROLE");
+    uint256 public allocatedBudgetForPC; // see if you tokenize this (probably)
 
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() initializer {}
-
-    function initialize() initializer public {
-        __ERC1155_init("");
-        __Ownable_init();
-        __ERC1155Supply_init();
-        __UUPSUpgradeable_init();
-
-
-    }
+    mapping (address => mapping(address => uint256)) public trackFundsUseByCP; // see if doable in a simple way for now
 
     // The following functions are overrides required by Solidity.
 
@@ -84,6 +66,7 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
             <<<<< 
     */
 
+    //  >>>>> What follows is for a more complex implementation inspired from Gnosis Conditional Token Framework: reevaluate nxt iteration <<<<<<
     //events
     /// @dev Emitted upon the successful preparation (its definition and acceptation by investors through their financial commitment, 
     ///         CP(s) comitting to delivery) of a Request for Content.
@@ -93,24 +76,35 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
     //CHECK THAT LATER (what would it be in our case: rn, just wnat to define a bit better the actual mechanics of the RfC/ERC1155)    
     //    [/// @param questionId An identifier for the question to be answered by the oracle.]
     /// @param RfCComponentsCount The number of outcome slots which should be used for this condition. Must not exceed 256.
-    event RfCValidation(
-        bytes32 indexed RfCId,      // maybe no need of this extra-complexity there: just use a simple uint id to refer to a RfC token, and then use your enums
-                                    // to build an array of enums (or a struct using the enums defined) that represents the RfC in its simple structured info,
-                                    // than can be then used to define a set of simple requirements (eg. must be a content streamed on Livepeer, etc.) 
-        //address indexed oracle,
-        bytes32 indexed RfCDefinitionId,
-        uint RfCComponentsCount
-    );
+    // event RfCValidation(
+    //     bytes32 indexed RfCId,      // maybe no need of this extra-complexity there: just use a simple uint id to refer to a RfC token, and then use your enums
+    //                                 // to build an array of enums (or a struct using the enums defined) that represents the RfC in its simple structured info,
+    //                                 // than can be then used to define a set of simple requirements (eg. must be a content streamed on Livepeer, etc.) 
+    //     //address indexed oracle,
+    //     bytes32 indexed RfCDefinitionId,
+    //     uint RfCComponentsCount
+    // );
 
-    event RfCDeliveryEvaluationOutcome(
-        bytes32 indexed RfCId,
-        //address indexed oracle,
-        bytes32 indexed RfCDefinitionId,
-        uint RfCComponentsCount,
-        uint[] payoutNumerators
-    );
+    // event RfCDeliveryEvaluationOutcome(
+    //     bytes32 indexed RfCId,
+    //     //address indexed oracle,
+    //     bytes32 indexed RfCDefinitionId,
+    //     uint RfCComponentsCount,
+    //     uint[] payoutNumerators
+    // );
+
+    /**
+    *
+    *   
+    *   REQUEST FOR CONTENT ELEMENTS OF DEFINITION => just a sketch at this step 
+    *   (will include on-chain Proofs, etc. to increase trustless aspect, and decrease ways for CPs to cheat, 
+    *   or anticipate on most possible disagreements)
+    *
+    * 
+    **/
 
     //(Phases/Cycles/Steps/)**Components that can translated *unambiguously* in a requirement** for the Content delivery:
+
     enum DeliveryStatus {
         investorsVote,
         cancelled,  //can happen at several stage on a mechanism of coordination between investors (that you might not implement
@@ -127,16 +121,26 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         contentAccessibleByInvestors,
         contentAccessForEveryone,
         //...,
+        unknown
     }
 
+    DeliveryStatus RfCRoundStatus;
 
     //>>>>>>Request for Content tokenization definition - check the way Gnosis tokenizes its "rich-logic/data tokens":<<<<<<<<\\
 
 
     //mandatory
-    enum ContentTypeDelivered {
+    enum When {
+        Live,
+        Stored,
+        Archived
+    }
+
+    When when;
+
+    enum ContentMediumDelivered {
         NFT,
-        LiveStream,
+        Stream,
         Video,
         Audio,
         Article,
@@ -145,12 +149,16 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         undefined               // => just used to disqualified a proposal before it reaches the proposal round (there will be also a grey/uncliclable 
                                 // are as long as the proposal don't include this mandatory field)
     }
-        // => result which could be passed in a tx from the frontend would be a value that triggers a certain call among the ERC1155 functions:
-        //  _mint() / etc.
 
-    //optional
-    enum subContentTypeFileFormats {
-        EthBlockTx,
+    ContentTypeDelivered contentMedium;
+
+        // => result which could be passed in a tx from the frontend would be a value that triggers a certain call among the ERC1155 functions:
+        //  _mint(), and with more time (TO DO), more complex integrations like call to mint an NFT of a LivePeer video feed, etc.
+
+    //optional for definition from the user and the minting of an RfC(not for the CP)
+    enum ContentDigitalFileFormats {
+        EthBlock,
+        EthTx,
         jpg,
         gif,
         raw,
@@ -173,9 +181,10 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         undefined
     }
         // => result: add a component (that can be split later if necessary) to the RfC tokenized set of requirements
+    ContentDigitalFileFormats fileFormat;
 
     //optional
-    enum PlatformIntegrationAtDelivery {
+    enum PlatformCompatibilityAtDelivery {
         OpenSea,
         LivePeer,
         Audius,
@@ -186,22 +195,27 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         undefined
     }
 
+    PlatformCompatibilityAtDelivery integratedTo;    
+
     //mandatory
     enum StoragePlatformUsedToDeliverContent {
+        EthBlocks,
+        IPFS,
+        Arweave,
+        Siacoin,
         OpenSea,
         LivePeer,
         Audius,
-        Filecoin,
-        Arweave,
-        Siacoin,
         AWS,
         Azure,
         //...,
         undefined
     }
 
-    // optional
-    enum dataRetrievedAPIToBeUsed {
+    StoragePlatformUsedToDeliverContent storageSolution;
+
+    // optional => can be forgotten for the purpose of this final project (just an exemple of how multiple use cases could be integrated in the protocol)
+    enum dataAPIToBeUsed {
         Google,
         GoogleMap,
         TheGraph,
@@ -209,28 +223,32 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         undefined
     }
 
+    dataAPIToBeUsed apiUsed;
+
     //mandatory => define further and more clearly the use of this choice of collateral => and maybe it will require more fields if it 
     // has to be decided for several uses in the protocol
-    enum Collateral {
+    enum ContentIsRedeemableFor {
         ETH,
-        FIL,
-        BTC,
+        WETH,
+        wFIL,
+        WBTC,
         LVP,
-        ...,
+        //...,
         USDT,
-        UST,
-        DAI
+        wUST,
+        DAI,
+        DecentralandIsland,
+        SandboxSpace
     } 
+
+    ContentIsRedeemableFor contentRedeemableFor; 
 
     // For the CPs time constraints AND maybe for instanting a time structure used in the FundsManagement contract (but that might just be defined in it) => both will be presented 
     // in the web fronted so the users can agree on it (when user's choice is required - for Pendle and Compound, it might be irrelevant)
-    struct timeForDelivery {
-        // Like for a bond expiration date, those data are then used in both RfC delivery date constraint, and likely the data structure
-        // will be instantiated separately for the use in Pendle mechanics
-        hours nbHoursToDelivery,
-        days nbDaysToDelivery,
-        years nbYearsToDelivery,
-    }
+    uint256 public timeForDelivery;
+    // Like for a bond expiration date, those data are then used in both RfC delivery date constraint, and likely the data structure
+    // will be instantiated separately for the use in Pendle mechanics
+
 
     /*
     >>>>>>Likely part of the next iteration
@@ -252,21 +270,26 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
 
     //in memory, at execution time in EVM instantiation of the RfC as a struct of array (?)
 
+    // Set arrays with values from enums passed (and checked for validity) from web3/MM tx 
     //The RfC struct, leading to the set of components and properties to be eventually tokenized as representing the request for content
+    
     struct RequestForContent {
         //Define 1st the "mandatory" fields (for the RfC to even be considered to be proposed )
-        ContentType[] contentTypes;
-        Platform[] platforms;
-        dataRetrivedAPIToBeUSed[] APIs;
-        Collateral[] RfCCollateral;
+        // set arrays with possibly several values of one enum
+        string[] contentTimeRequirements;
+        string[] media;
+        string[] storageSolutions;
+        string[] fileFormats;
+        string[] contentIntegrations;
+        string[] redeemableFor;
         //...;
-        Properties[] RfCProperties;
+        //Properties[] RfCProperties;
     }
 
     //read function of te struct to extract offsets for properties, and metadata to be used, like length, etc.
-    function readRfCStruct(RequestForContent RfC) internal returns(int256 length, uint256[] proertiesOffsets, ..?) {
-        //TO DO
-    }
+    // function readRfCStruct(RequestForContent RfC) internal returns(int256 length, uint256[] proertiesOffsets, ..?) {
+    //     //TO DO
+    // }
 
     
 
@@ -281,7 +304,22 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
     // components <= 256 (check if data type like struct can have more elements??)
     // controls on the mandatory fields (to be defined in your contract - eg. at least one contentType, etc.) 
 
-    function setRfC(RequestForContent RfC, bool isFinalized, int256 fundsPooledInvestorsAmount, uint256 fundsPooledCPsAmount) external returns() {};
+    function setEnums(uint256 _data) internal {
+        // Find a way (simpler) than with offsets in bytes, but if necessary... do it
+        //contentTimeRequirements = ...; 
+    }
+
+    function setRfCForMint() internal returns (RequestForContent RfC) {
+        // set struct with the values set in setEnums:
+        RequestForContent.When = _when;
+        RequestForContent.ContentTypeDelivered = _contentType;
+        //...
+    } 
+
+        // =>>>>> USE THIS struct states to avoid 2 mints and keep this track state during the CP silent auction
+
+    // Then, once CP selected, mint it (wit the info like fundsAllocated, etc. that allow to leverage ERC1155 possibilities):
+    function setRfCReadyForMint(RequestForContent RfC, bool isFunded, int256 fundsPooledInvestorsAmount, uint256 fundsPooledCPsAmount) external returns() {};
         //TO DO
 
         //NFT minted, incorporating the possibilities to be then splitted (as for Gnosis Conditional Tokens)
@@ -298,7 +336,7 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
     }
 
     //called in mint function (probably?)
-    function collaterlizedRfCAtMinting() internal returns() {
+    function collaterlizedRfCMint() internal returns() {
         //TO DO
     };
 
@@ -306,8 +344,18 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
         //TO DO
     }
 
+    // QUESTION: in FundsManager contract or here??
     //comparable to the split function in the Gnosis Conditional Token contract:
-    function burnSharesNFTforERC20(address _contentCreationOG, uint256 _contentPrice, )
+    function burnSharesNFTforERC20(address _contentCreationOG, uint256 _contentPrice, ) external returns(bool success) {
+        //TO DO: allow investors to sell their shares for some ERC20 stablecoin(DAI)/Eth
+
+    }
+
+    // Lkely not to be implemented in this iteration
+    //for readability and clarity (in function call for instance), separate the function below from the one adding new elements:
+    function addNewElToRfC() internal returns () {
+        //TO DO: enrich an existing RfC by adding richer content/properties (eg. might be interesting if it is a software or an investigative article)
+    }
 
     /// @dev This function splits RfC in the case a subset of the required components are to be delegated among several CPs. (I will limit for now the use case to that)
     //    REWORK for your RfC instead [/// @dev This function splits a position. If splitting from the collateral, this contract will attempt to transfer `amount` collateral from the message sender to itself. Otherwise, this contract will burn `amount` stake held by the message sender in the position being split worth of EIP 1155 tokens. Regardless, if successful, `amount` stake will be minted in the split target positions. If any of the transfers, mints, or burns fail, the transaction will revert. The transaction will also revert if the given partition is trivial, invalid, or refers to more slots than the condition is prepared with.]
@@ -329,55 +377,61 @@ contract RequestForContent is ERC1155, Initializable, ERC1155Upgradeable, /*Owna
             and the content brought to life through the use of this protocol).
     <<<<<<<*/
     
-    function splitRfC(
-        IERC721 setOfTasksDelegated,
-        uint calldata RfCId,
-        IERC20 RfCcollateralizedToken,
-        uint[] calldata partition,
-        uint amount
-    ) internal returns() {
-        //TO DO
+
+    /** 
+    *
+    *
+    *   >>>>Too complex rn, for nxt iterations<<< 
+    *
+    *
+    **/
+
+    // function splitRfC(
+    //     IERC721 setOfTasksDelegated,
+    //     uint calldata RfCId,
+    //     IERC20 RfCcollateralizedToken,
+    //     uint[] calldata partition,
+    //     uint amount
+    // ) internal returns() {
+    //     //TO DO
         
-        /*split pattern: mandatory fields (1st token) / offset -> property X = 2nd token / etc.
-        // 
-        // Minting those NFT-associated-to-"yes/no"-tokens where: 
-        // 1/ we want to know in the end if it is included in the delivery
-        // 2/ can be used (function can be called for this use case too) to coordinate/delegate several CPs on 1 RfC - in the case
-        //      where several ContentType, PlatformIntegrationAtDelivery, ..., (any field having several members for the same element)
-        //      that might require by ) are expected (tokenized in the RfC).
-        // 3/ must correspond to a calculation on CPs slashing on rewards if not delivered (how do we come to an agreement on that?) )
-        //      ==> let's agree that in the delivery content, the medium, the content format, accessibility, exactitude (ex: geolocation)
-        //      will be valued more than the richness in properties. It does not mean "a lot" more, so a ratio that 
-        //      >>>***captures some intuitive "successful in delivery AND having a quality that we might expect 
-        //      given the RfC **and its future cunsumption**"***<<< [[[THIS WOULD BECOME A WHOLE TOPIC IN ITSELF TO RESEARCH TO MAKE THIS PROTOCOL ACTUALLY
-                WORK IN THE WILD... a bit like the work Gnosis team made to come up with Conditional Tokens for predictive markets I'm guessing]]]
-                    => I think that is it: if I manage to define in a satisfactory way the intended future consumption of the content,
-                    I will have some better pre-agreement on the content "quality".
+    //     /*split pattern: mandatory fields (1st token) / offset -> property X = 2nd token / etc.
+    //     // 
+    //     // Minting those NFT-associated-to-"yes/no"-tokens where: 
+    //     // 1/ we want to know in the end if it is included in the delivery
+    //     // 2/ can be used (function can be called for this use case too) to coordinate/delegate several CPs on 1 RfC - in the case
+    //     //      where several ContentType, PlatformIntegrationAtDelivery, ..., (any field having several members for the same element)
+    //     //      that might require by ) are expected (tokenized in the RfC).
+    //     // 3/ must correspond to a calculation on CPs slashing on rewards if not delivered (how do we come to an agreement on that?) )
+    //     //      ==> let's agree that in the delivery content, the medium, the content format, accessibility, exactitude (ex: geolocation)
+    //     //      will be valued more than the richness in properties. It does not mean "a lot" more, so a ratio that 
+    //     //      >>>***captures some intuitive "successful in delivery AND having a quality that we might expect 
+    //     //      given the RfC **and its future cunsumption**"***<<< [[[THIS WOULD BECOME A WHOLE TOPIC IN ITSELF TO RESEARCH TO MAKE THIS PROTOCOL ACTUALLY
+    //             WORK IN THE WILD... a bit like the work Gnosis team made to come up with Conditional Tokens for predictive markets I'm guessing]]]
+    //                 => I think that is it: if I manage to define in a satisfactory way the intended future consumption of the content,
+    //                 I will have some better pre-agreement on the content "quality".
 
-                    BUT, that being said, I have to add a round of possible complaints by users for a delivery that does not fulfill the
-                    intended content in a significant way - although if I manage to define in a satisfactory way a Request for Content pattern,
-                    I will not need this (overhead and un/de-coordinated behavior - very difficult it seems to get afterwards except by 
-                    very costly outcomes like "redo or cancel"...).
-        */
+    //                 BUT, that being said, I have to add a round of possible complaints by users for a delivery that does not fulfill the
+    //                 intended content in a significant way - although if I manage to define in a satisfactory way a Request for Content pattern,
+    //                 I will not need this (overhead and un/de-coordinated behavior - very difficult it seems to get afterwards except by 
+    //                 very costly outcomes like "redo or cancel"...).
+    //     */
 
-        // with the parameters, mint() subsets of tokens as other ERC1155 that represents CPs RfC new positions and ERC20 staked/commited new positions.
-    }
+    //     // with the parameters, mint() subsets of tokens as other ERC1155 that represents CPs RfC new positions and ERC20 staked/commited new positions.
+    // }
 
-    function mergeEl() internal returns() {  // might be called in 2 instances:
-        //TO DO
-                                                    // 2/ contentQuality not passed (investors vote - simple mechanism, same
-                                                    // as below) and investors still want to commit w/o the cost incurred by a
-                                                    // new RfC whole cycle (including gaining on the Yield compounded that  
-                                                    // would be lost if reset to the very beginning)
-                                                    // 1/ contentEnrichment (means adding an investors **voting phase** 
-                                                    //      between contentDelivered and contentAccepted 
-                                                    //      => think of an easy way to implement it )
-                                                    // 
-    }
+    // function mergeEl() internal returns() {  // might be called in 2 instances:
+    //     //TO DO
+    //                                                 // 2/ contentQuality not passed (investors vote - simple mechanism, same
+    //                                                 // as below) and investors still want to commit w/o the cost incurred by a
+    //                                                 // new RfC whole cycle (including gaining on the Yield compounded that  
+    //                                                 // would be lost if reset to the very beginning)
+    //                                                 // 1/ contentEnrichment (means adding an investors **voting phase** 
+    //                                                 //      between contentDelivered and contentAccepted 
+    //                                                 //      => think of an easy way to implement it )
+    //                                                 // 
+    // }
 
-    //for readability and clarity (in function call for instance), separate the function below from the one adding new elements:
-    function addNewElToRfC() internal returns () {
-        //TO DO
-    }
+
 
 }
