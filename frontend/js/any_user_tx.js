@@ -1,1 +1,0 @@
-//List all RfCs, with characteristics and prices to access + buy button (ultimately a search bar)
