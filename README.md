@@ -57,3 +57,7 @@ TBD
 # How to run the smart contracts test units
 
 TBD
+
+## Link to the screencast
+
+TBD
