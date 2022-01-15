@@ -44,3 +44,16 @@ TBD
 ## Certification NFT - Ethereum address
 
 TBD
+
+
+# Installing dependencies
+
+TBD
+
+# How to run the project
+
+TBD
+
+# How to run the smart contracts test units
+
+TBD
