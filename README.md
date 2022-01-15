@@ -3,7 +3,7 @@
 This project has an overambitious goal, that eventually results in a very simplistic design of its initial purpose:
 an expression of the web3, by bridging the digital content creation economy which thrives in the "NFT ecosystem", with the DeFi stack.
 
-The result is this attempt to design a simple version of a decentralized, generalized content creation and production protocol.
+The result is this attempt to design a simple version of a decentralized, autonomous, generalized content creation/production protocol.
 
 There are 3 kind of users, each with a different flow (dashboards from my frontend perspective):
 - Investors, who are funding what I call a "Request for Content" (defined further);
