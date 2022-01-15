@@ -14,6 +14,18 @@ contract FundsManager {
     // (ex: minting an NFT and somr ERC-20 and sending both to a user for an art project that wants to give back to the investors
     // through the artwork + some of the benefits made during the drop, or after; ):
     
+    uint256 public immutable MIN_ESCROW_TIME = 15 days; //check for how to set a duration/expiration time, etc.
+
+    uint256 public contractBalance; // by default can be accessed by this.balance, or something like that
+
+    bool public locked;
+
+    uint256 public shareOfRfCOwnership;
+
+    uint256 private ratio;
+
+    mapping (address => mapping(uint256 => uint256)) public shareRatioOfRfC; 
+
     using SafeERC20 for IERC20;
 
     address public immutable contractAddr = address(this);  // used mainly to txs initiated by this contract (with the Uniswap and Compound ones, and any PCV-like mechanics)
@@ -106,13 +118,7 @@ contract FundsManager {
         _setupRole(FUNDSMANAGER_ROLE, msg.sender);
     }
 
-    /*
-    //fallback and ..? functions
-    //handle control on conditions for contract receiving the funds: only eth for now (and the usual != 0)
-    function () external payable {
-        revert();
-    }
-    */
+
 
     //>>>>SEE ESCROW pattern chosen over direct calls on this contract<<<<
     /// @notice a user can read the value of funds held by the contract (before they are put in the "management cycle")
@@ -145,6 +151,18 @@ contract FundsManager {
         //
     function 
     */
+
+    // call to safeTransfer from ERC1155
+    function invest(address _from, uint256 _amount) {
+        // safeTransferFrom(
+        // address _from,
+        // address _to,
+        // uint256 _id,
+        // uint256 _amount,
+        // bytes calldata _data
+        // )
+    )
+    }
 
     function receiveFunds(address _from, uint _amount) public payable {
         //1st function to handle every deposit = before any user's classification, or any swap or tapping in any yield protocol.

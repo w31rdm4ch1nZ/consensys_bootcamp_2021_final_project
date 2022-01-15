@@ -291,9 +291,12 @@ contract RequestForContent is ERC1155/*, Initializable, ERC1155Upgradeable, Owna
     //     //TO DO
     // }
 
-    
+    event RfCProposal();
 
-    //Define some mandatory fields for a RfC to be minted
+    event RfCMinted();
+
+    //event RfCCPselected();
+
 
     //Set a RfC structure (built with inputs from the Proposer) to enter the proposal to CPs cycle will require from investors to commit funds/send funds to the escrow 
     // contract
@@ -303,6 +306,10 @@ contract RequestForContent is ERC1155/*, Initializable, ERC1155Upgradeable, Owna
     // length > 0 
     // components <= 256 (check if data type like struct can have more elements??)
     // controls on the mandatory fields (to be defined in your contract - eg. at least one contentType, etc.) 
+
+    constructor() public {
+        factory = msg.sender;   //will be the FundsManager contract => logic that can be adapted further to my use case/pattern
+    }
 
     function setEnums(uint256 _data) internal {
         // Find a way (simpler) than with offsets in bytes, but if necessary... do it
