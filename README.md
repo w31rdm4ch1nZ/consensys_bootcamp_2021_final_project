@@ -46,15 +46,15 @@ TBD
 TBD
 
 
-# Installing dependencies
+## Installing dependencies
 
 TBD
 
-# How to run the project
+## How to run the project
 
 TBD
 
-# How to run the smart contracts test units
+## How to run the smart contracts test units
 
 TBD
 

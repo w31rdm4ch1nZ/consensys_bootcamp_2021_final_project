@@ -102,6 +102,8 @@ contract FundsManager {
 
     event FundsSwappedToStablecoin(bool success);
 
+    event RfCListing()
+
 
     //constructor definition:
     /// @custom:oz-upgrades-unsafe-allow constructor

@@ -2,5 +2,5 @@
 // investors.
 
 // a cToken minted from all the funds allocated to a specific RfC.
-//  => the only thing to implement in this contract is for the CP to be able to borrow against this cToken,
-//  following the   
+//  => the only thing to implement in this contract is for the CP to be able to "borrow against" this cToken,
+//  following the requirements defined in 
