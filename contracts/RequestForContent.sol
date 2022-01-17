@@ -41,7 +41,9 @@ contract RequestForContent is ERC1155/*, Initializable, ERC1155Upgradeable, Owna
     // input some data from th UI frontend - through web3.js or so, in a way that can't be tampered with (if it is even possible without using a central server, and is using the security
     // model of ethereum smart contract).
 
-    uint256 public RfCid;
+    //I need this to be returned by the ERC1155 RfC contract (instead of duplicating the state variable in every contract)
+    //  AND I want it to be called only by contracts that need it (no EOAs)
+    uint256 private RfCid;
 
     uint256 private fundsPooledForRfC;  // should be set after mint...? (because unknown at proposal)
 
@@ -49,14 +51,8 @@ contract RequestForContent is ERC1155/*, Initializable, ERC1155Upgradeable, Owna
 
     mapping (address => mapping(address => uint256)) public trackFundsUseByCP; // see if doable in a simple way for now
 
-    // The following functions are overrides required by Solidity.
+    FundsManager fundsManager /* = address of contract deployed on the testnet*/;
 
-    function _beforeTokenTransfer(address operator, address from, address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
-        internal
-        override(ERC1155Upgradeable, ERC1155SupplyUpgradeable)
-    {
-        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
-    }
 
     /*
             >>>>
@@ -307,8 +303,34 @@ contract RequestForContent is ERC1155/*, Initializable, ERC1155Upgradeable, Owna
     // components <= 256 (check if data type like struct can have more elements??)
     // controls on the mandatory fields (to be defined in your contract - eg. at least one contentType, etc.) 
 
+     //modifiers:
+
+    modifier OnlyApprovedAcccounts{
+        require(caller = _operatorApprovals, "caller is not authorized");
+        _;
+    }
+
+
+    // deploy contract
     constructor() public {
-        factory = msg.sender;   //will be the FundsManager contract => logic that can be adapted further to my use case/pattern
+        operator = fundsManager;   //will be the FundsManager contract => logic that can be adapted further to my use case/pattern
+        //call to ERC1155 (maybe the interface of the one you imported)
+        setApprovalForAll(operator, true);
+    }
+
+
+    // The following functions are overrides required by Solidity.
+
+    function _beforeTokenTransfer(address operator, address from, address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
+        internal
+        override(ERC1155Upgradeable, ERC1155SupplyUpgradeable)
+    {
+        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+    }
+
+    //replace the need for the state variable RfCid that you defined in this contract:
+    function getRfCId(uint256 _RfCid) external OnlyApprovedContracts returns(uint256) {
+        return _RfCid;
     }
 
     function setEnums(uint256 _data) internal {
