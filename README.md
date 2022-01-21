@@ -1,5 +1,9 @@
 # My Consensys 2021 Bootcamp Final Project
 
+=> MOVED TO another repo: https://github.com/w31rdm4ch1nZ/consensys_bootcamp_2021_minimum_viable_final_project
+
+[Go to the other repo above to find the minimum viable version of a final project]
+
 This project has an overambitious goal, that eventually results in a very simplistic design of its initial purpose:
 an expression of the web3, by bridging the digital content creation economy which thrives in the "NFT ecosystem", with the DeFi stack.
 

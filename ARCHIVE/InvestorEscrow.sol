@@ -30,8 +30,8 @@ contract InvestorsEscrow {
     //  - ...
     uint256 public immutable MIN_ESCROW_TIME = 30 days; //check for how to set a duration/expiration time, etc.
 
-    // RequestForContent public RfC;
-    uint256 RfCId;
+    // RequestForContent public RfC; => have to go through getRfCid() in the RfC ERC1155 contract
+    //uint256 RfCId;
 
     //a value that says when a RfC is passes the proposal round and is now in "processing" (by a CP) status:
     //  => this value should be returned to this contract by the contract implementing the proposal logic
@@ -99,6 +99,8 @@ contract InvestorsEscrow {
     event Initialized(address _mintedRfC);
 
     event DepositForProposal(msg.sender, uint256 proposalId, uint256 rfc);
+
+    //define an init function instead
     constructor(){
         //Check Permissions pattern in the FEI protocol code
         _setContractAdminRole(keccak256("INVESTORESCROW_ADMIN_ROLE"));
